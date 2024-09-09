@@ -1,0 +1,56 @@
+.profile {
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    background-color: #f9f9f9;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  }
+  
+  .profile h2 {
+    text-align: center;
+    margin-bottom: 20px;
+  }
+  
+  .profile-photo {
+    text-align: center;
+    margin-bottom: 20px;
+  }
+  
+  .profile-photo img {
+    max-width: 150px;
+    border-radius: 50%;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  }
+  
+  .profile input[type="file"],
+  .profile input[type="email"],
+  .profile input[type="password"],
+  .profile input[type="text"] {
+    display: block;
+    width: calc(100% - 20px);
+    margin: 10px auto;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+  }
+  
+  .profile button {
+    display: block;
+    width: 100%;
+    padding: 10px;
+    margin-top: 20px;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.3s ease;
+  }
+  
+  .profile button:hover {
+    background-color: #0056b3;
+  }
+  

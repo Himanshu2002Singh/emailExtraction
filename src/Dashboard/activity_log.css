@@ -1,0 +1,31 @@
+
+.user-list ul {
+    list-style-type: none;
+    padding: 0;
+  }
+  
+  .user-list li {
+    padding: 10px;
+    cursor: pointer;
+    border-bottom: 1px solid #ddd;
+  }
+  
+  .user-list li:hover {
+    background-color: #f0f0f0;
+  }
+  
+  .user-activity {
+    margin-top: 20px;
+  }
+  
+  .user-activity ul {
+    list-style-type: none;
+    padding: 0;
+  }
+  
+  .user-activity li {
+    padding: 10px;
+    border-bottom: 1px solid #ddd;
+    margin-bottom: 10px;
+  }
+  

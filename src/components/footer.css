@@ -1,0 +1,90 @@
+footer
+{
+    background-image: url('../assets/img/footer-bg.jpg');
+    background-size: cover; /* Ensure the background covers the entire element */
+    background-position: center; /* Center the background image */
+    /* Make the overlay positioned absolutely within the footer */
+    color:black;
+    z-index: -1;
+    
+}
+
+
+.footer-overlay3{
+   
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    padding: 25px;
+     /* Adjust the opacity for overlay effect */
+    
+  }
+  
+  .footer-content {
+    margin-bottom: 20px;
+   
+    
+  }
+  
+  .footer-header {
+    font-size: 18px;
+    font-weight: bold;
+    margin-bottom: 15px;
+    color: #e9ecef;
+  }
+  
+  .footer-content p {
+    margin: 0;
+    color: white;
+    font-size: 16px;
+  }
+  
+  .footer-content ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    color: white;
+  }
+  
+  .footer-content ul li {
+    margin-bottom: 10px;
+    color: white;
+  }
+  
+  .footer-content ul li a {
+    color: white;
+    text-decoration: none;
+  }
+  
+  .footer-content ul li a:hover {
+    text-decoration: underline;
+  }
+  
+  
+  
+  .footer-contact {
+    text-align: center;
+    margin: 20px 0;
+    color: white;
+  }
+  
+  .footer-contact a {
+    color: #007bff;
+    text-decoration: none;
+  }
+  
+  .footer-contact a:hover {
+    text-decoration: underline;
+  }
+  
+  .copyright {
+    background-color: black;
+    padding: 15px 0;
+    border-top: 1px solid black;
+  }
+  
+  .text {
+    color: white;
+  }
+  

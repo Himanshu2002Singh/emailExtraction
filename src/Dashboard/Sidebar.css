@@ -1,0 +1,11 @@
+.icon3 {
+  color: rgb(54, 42, 219);
+  font-size: 25px;
+}
+
+@media screen and (min-width: 800) {
+  .media {
+    padding: 30rem;
+    margin-bottom: 5rem;
+  }
+}

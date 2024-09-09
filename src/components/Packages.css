@@ -1,0 +1,174 @@
+.container5 {
+  padding: 40px;
+ 
+}
+
+h2 {
+  color: #333;
+  text-align: center;
+  padding-top: 50px;
+}
+
+p {
+  color: #555;
+  font-size: 18px;
+  text-align: center;
+}
+
+.packages {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 20px;
+}
+
+.package {
+  background-color: #fff;
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+  width: 300px;
+  transition: transform 0.3s;
+}
+
+.package:hover {
+  transform: translateY(-10px);
+  background-color: #28a745;
+  color: white;
+}
+
+.package h3 {
+  color: #333;
+  font-weight: 600;
+  font-size: 26px;
+}
+
+.price {
+  font-size: 24px;
+  color: #333;
+  margin: 10px 0;
+  font-weight: 600;
+}
+
+button {
+  background-color: #28a745;
+  border: none;
+  color: #fff;
+  padding: 10px 20px;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.register-btn {
+  background-color: #007bff;
+}
+
+button:hover {
+  background-color: #218838;
+}
+
+.register-btn:hover {
+  background-color: #0056b3;
+}
+
+.features {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 40px;
+  background-color: #fff;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  margin-top: 40px;
+}
+
+.features-left,
+.features-right {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  flex: 1;
+}
+
+.features-left {
+  text-align: left;
+}
+
+.features-right {
+  text-align: right;
+}
+
+.features-image {
+  flex: 0 0 auto;
+  padding: 0 20px;
+}
+
+.features .feature {
+  display: flex;
+  align-items: center;
+}
+
+.features .feature img {
+  max-width: 60px;
+  margin-right: 20px;
+}
+
+.features .feature h3 {
+  color: #333;
+  font-weight: 600;
+  font-size: 22px;
+}
+
+.features .feature p {
+  color: #555;
+  font-size: 16px;
+}
+
+@media (max-width: 768px) {
+  .packages {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .package {
+    width: 90%;
+  }
+
+  .features {
+    flex-direction: column;
+  }
+
+  .features-left,
+  .features-right {
+    text-align: center;
+  }
+
+  .features-left,
+  .features-right {
+    width: 100%;
+  }
+
+  .features-image {
+    padding: 20px 0;
+  }
+}
+.contact-section {
+  background-color: #b1e1bb;
+  padding: 1rem;
+  margin: 2rem 0;
+  text-align: center;
+  
+}
+.section-title {
+  font-size: 2rem;
+  text-align: center;
+  margin-bottom: 1rem;
+  margin-top: 8%;
+}
+
+.section-description {
+  text-align: center;
+  margin-bottom: 2rem;
+}

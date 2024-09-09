@@ -1,0 +1,97 @@
+body{
+  background-image: url('./assets/img/bg-img-4-sec.jpg');
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+.setti{
+  margin-left: -100%;
+}
+
+.btn1{
+ 
+  font-weight: 400;
+  padding: 0.6rem 1.8rem;
+  background: linear-gradient(to right, hsl(187, 85%, 43%), hsl(199, 100%, 22%));
+  color: hsl(0, 0%, 90%);
+  border-radius: 0.5rem;
+  border: none;
+  outline: none;
+  row-gap: 3rem;
+  cursor: pointer;
+  transition: all 300ms ease-in;
+}
+
+.btn1 a {
+  color: hsl(0, 0%, 90%);
+  font-weight: 600px;
+}
+
+.btn1:hover {
+  background:  hsl(199, 100%, 22%);
+  transform: scale(1.1);
+}
+
+.flex {
+  display: flex;
+  align-items: center;
+}
+
+.icon {
+  font-size: 2.7rem;
+  cursor: pointer;
+  
+
+}
+
+
+.grid {
+  display: grid;
+  align-items: center;
+}
+
+
+
+  .section {
+    padding: 6rem 0 4rem;
+  }
+
+ 
+  @media screen and (max-width:768px) {
+
+    .close {
+      position: absolute;
+      top: 1rem;
+      right: 1.5rem;
+      color: var(--primaryColor);
+
+      &:hover {
+        color: var(--secondaryColor);
+      }
+    }
+   
+
+    .toggle {
+      .icon {
+        font-size: 25px;
+        color: var(--primaryColor);
+      }
+  
+      &:hover.icon {
+        color: var(--secondaryColor);
+      }
+  
+  }
+  
+  }
+
+   @media screen and (min-width:769px) {
+
+    .toggle,
+    .close {
+      display: none;
+    }
+  }
+ 
