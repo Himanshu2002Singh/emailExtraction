@@ -21,8 +21,8 @@ app.use(express.static(__dirname));
 // Database connection setup
 const db = mysql.createConnection({
   host: 'localhost',
-  user: 'root',
-  password: '',
+  user: 'myuser',
+  password: 'Nidhimanshu@91',
   database: 'myapp'
 });
 
