@@ -5,7 +5,6 @@ import './UserDetails.css';
 import NavbarDashboard from './NavbarDashboard';
 import ResponsiveDrawer from './Sidebar';
 import { Box } from '@mui/material';
-
 const UserDetails = () => {
   const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -14,7 +13,7 @@ const UserDetails = () => {
   useEffect(() => {
     const fetchUsers = async () => {
       try {
-        const response = await axios.get('http://localhost:5000/users/details'); // Adjust the URL as needed
+        const response = await axios.get('http://88.222.245.28:5000/users/details'); // Adjust the URL as needed
         setUsers(response.data);
         setLoading(false);
       } catch (error) {

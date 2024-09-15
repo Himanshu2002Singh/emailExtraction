@@ -13,7 +13,7 @@ const UpdateCredit = () => {
   useEffect(() => {
     const fetchUsers = async () => {
       try {
-        const response = await axios.get('http://localhost:5000/users-credit');
+        const response = await axios.get('http://88.222.245.28:5000/users-credit');
         setUsers(response.data);
         setLoading(false);
       } catch (error) {
@@ -27,7 +27,7 @@ const UpdateCredit = () => {
 
   const handleUpdate = async (userId, field, value) => {
     try {
-      await axios.put(`http://localhost:5000/user-credit/${userId}`, { [field]: value });
+      await axios.put(`http://88.222.245.28:5000/user-credit/${userId}`, { [field]: value });
       alert('User updated successfully');
     } catch (error) {
       alert('Error updating user');

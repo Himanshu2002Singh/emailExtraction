@@ -14,7 +14,7 @@ const UserActivity = () => {
   useEffect(() => {
     const fetchUsers = async () => {
       try {
-        const response = await axios.get('http://localhost:5000/api/users_activity2');
+        const response = await axios.get('http://88.222.245.28:5000/api/users_activity2');
         // Filter users with role 'user'
         const filteredUsers = response.data.filter(user => user.role === 'user');
         setUsers(filteredUsers);
@@ -28,7 +28,7 @@ const UserActivity = () => {
 
   const fetchActivityLogs = async (id) => {
     try {
-      const response = await axios.get(`http://localhost:5000/api/activity_log/${id}`);
+      const response = await axios.get(`http://88.222.245.28:5000/api/activity_log/${id}`);
       setActivityLogs(response.data);
     } catch (error) {
       console.error('Error fetching activity logs:', error);

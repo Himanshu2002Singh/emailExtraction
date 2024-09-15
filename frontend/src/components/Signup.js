@@ -34,7 +34,7 @@ const Signup = ({ handleLogin }) => {
       return;
     }
     try {
-      const response = await axios.post('http://localhost:5000/signup', formData);
+      const response = await axios.post('http://88.222.245.28:5000/signup', formData);
       
       // Assuming the signup returns the same token and user info
       localStorage.setItem('token', response.data.token);
