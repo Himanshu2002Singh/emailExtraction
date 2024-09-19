@@ -20,6 +20,7 @@ const Signup = ({ handleLogin }) => {
   const [success, setSuccess] = useState('');
   const navigate = useNavigate();
 
+  // Handle form input changes
   const handleChange = (e) => {
     setFormData({
       ...formData,
@@ -27,22 +28,29 @@ const Signup = ({ handleLogin }) => {
     });
   };
 
+  // Handle form submission
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!agree) {
       setError('You must agree to the terms and conditions');
       return;
     }
-    try {
-      const response = await axios.post('http://88.222.245.28:5000/signup', formData);
-      
-      // Assuming the signup returns the same token and user info
-      localStorage.setItem('token', response.data.token);
-      localStorage.setItem('credits', 100); // Example default credits
-      localStorage.setItem('userId', response.data.id);
 
-      handleLogin(100, response.data.id); 
-      setSuccess('Signup successful! Redirecting to home page...');
+    try {
+      // Post request to signup route
+      const response = await axios.post('http://88.222.245.28:5000/signup', formData);
+
+      // Store the token and user details in local storage
+      localStorage.setItem('token', response.data.token);
+      localStorage.setItem('credits', response.data.credits); // Store default credits
+      localStorage.setItem('userId', response.data.id); // Store user ID
+
+      // Call handleLogin with credits and userId
+      handleLogin(response.data.credits, response.data.id);
+
+      setSuccess('Signup successful! Redirecting to login page...');
+      
+      // Redirect to login page
       navigate('/');
     } catch (error) {
       console.error('Signup error', error);

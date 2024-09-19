@@ -21,8 +21,8 @@ app.use(express.static(__dirname));
 // Database connection setup
 const db = mysql.createConnection({
   host: 'localhost',
-  user: 'myuser',
-  password: 'Nidhimanshu@91',
+  user: 'root',
+  password: '',
   database: 'myapp'
 });
 
@@ -45,7 +45,7 @@ const upload = multer({ storage });
 
 // Utility function to generate JWT tokens
 const generateToken = (userId) => {
-  return jwt.sign({ id: userId }, 'defaultsecret', { expiresIn: '1h' });
+  return jwt.sign({ id: userId }, 'defaultsecret', { expiresIn: '5h' });
 };
 
 // Middleware for authentication
@@ -64,21 +64,41 @@ const authenticateToken = (req, res, next) => {
 // Route: User Signup
 app.post('/signup', async (req, res) => {
   const { fullName, email, password, country, state, city, whatsapp, phoneNumber, companyName } = req.body;
-  const hashedPassword = await bcrypt.hash(password, 10);
-  const defaultRole = 'user';
-  const credits = 100;
 
-  db.query('INSERT INTO users (fullName, email, password, country, state, city, whatsapp, phoneNumber, companyName, role, credits) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)', 
-    [fullName, email, hashedPassword, country, state, city, whatsapp, phoneNumber, companyName, defaultRole, credits], 
-    (err, result) => {
-      if (err) {
-        if (err.code === 'ER_DUP_ENTRY') {
-          return res.status(400).send({ message: 'Email already exists' });
+  try {
+    const hashedPassword = await bcrypt.hash(password, 10);
+    const defaultRole = 'user';
+    const credits = 100;
+    const premiumUser = 'no';
+    const inputMax = 100;
+    const package = 100;
+
+    db.query(
+      'INSERT INTO users (fullName, email, password, country, state, city, whatsapp, phoneNumber, companyName, role, credits, premium_user, input_max,package) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,?)',
+      [fullName, email, hashedPassword, country, state, city, whatsapp, phoneNumber, companyName, defaultRole, credits, premiumUser, inputMax, package],
+      (err, result) => {
+        if (err) {
+          if (err.code === 'ER_DUP_ENTRY') {
+            return res.status(400).send({ message: 'Email already exists' });
+          }
+          return res.status(500).send({ message: 'Database error' });
         }
-        return res.status(500).send({ message: 'Database error' });
+
+        const userId = result.insertId; // Get the ID of the newly created user
+        const token = generateToken(userId); // Generate token using userId
+
+        res.status(201).send({
+          message: 'User registered successfully',
+          token, 
+          id: userId,
+          credits,
+          role: defaultRole
+        });
       }
-      res.status(201).send({ message: 'User registered successfully' });
-    });
+    );
+  } catch (error) {
+    return res.status(500).send({ message: 'Error during signup process' });
+  }
 });
 
 // Route: User Login
