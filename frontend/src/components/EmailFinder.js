@@ -109,7 +109,7 @@ const EmailFinder = ({ id }) => {
       setModalIsOpen(true);
       setRemainingDomains(prev => prev - domainList.length);
 
-      await axios.post(`http://localhost:5000/api/user/activity/${id}`, {
+      await axios.post(`http://88.222.245.28:5000/api/user/activity/${id}`, {
         urls: domainList,
         emailCount: response.data.emails.length,
         phoneCount: response.data.phoneNumbers.length,
