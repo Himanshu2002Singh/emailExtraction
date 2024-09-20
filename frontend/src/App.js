@@ -5,7 +5,7 @@ import EmailFinder from './components/EmailFinder';
 import Login from './components/Login';
 import Signup from './components/Signup';
 import Dashboard from './Dashboard/Dashboard';
-import Header from './components/Header';
+import Header2 from './components/Header2';
 import Footer from './components/footer';
 import UserDetails from './Dashboard/userdetails';
 import UpdateCredit from './Dashboard/UpdateCredits';
@@ -36,7 +36,7 @@ const App = () => {
   return (
     <div className="App">
       {!isOnAdminPage && (
-        <Header isLoggedIn={isLoggedIn} handleLogout={handleLogout} credits={credits} />
+        <Header2 isLoggedIn={isLoggedIn} handleLogout={handleLogout} credits={credits} />
       )}
       <Routes>
         <Route path="/login" element={<Login handleLogin={handleLogin} />} />

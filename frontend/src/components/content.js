@@ -120,9 +120,7 @@ const Packages = () => {
           ))}
         </div>
 
-        <div className="features-image">
-          <img src={centerImage} alt="Central Image" className="center-image" />
-        </div>
+      
 
         <div className="features-right">
           {featuresRight.map((feature, index) => (

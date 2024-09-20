@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-import './Header.css';
+import './Login.css';
 import { useNavigate } from 'react-router-dom';
 
 const Login = ({ handleLogin }) => {
@@ -13,7 +13,7 @@ const Login = ({ handleLogin }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post('http://88.222.245.28:5000/login', { email, password });
+      const response = await axios.post('http://localhost:5000/login', { email, password });
 
       // Store token in localStorage
       localStorage.setItem('token', response.data.token);
@@ -34,7 +34,7 @@ const Login = ({ handleLogin }) => {
   };
 
   return (
-    <div>
+    <div style={{marginTop:'13%'}}>
       <div className="login-form">
         <h2>Login</h2>
         {error && <div className="error-message">{error}</div>}

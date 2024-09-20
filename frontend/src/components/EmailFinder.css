@@ -6,7 +6,7 @@
 .email-finder {
   max-width: 800px;
   margin: 0 auto;
-  margin-top: 1%;
+  margin-top: 8%;
   padding: 50px 50px;
   border: 1px solid #ddd;
   
@@ -268,3 +268,13 @@
   cursor: pointer;
 }
 
+@media (max-width :768px){
+  .email-finder {
+   
+    margin-top: 19%;
+    padding: 50px 50px;
+    border: 1px solid #ddd;
+    
+  }
+  
+}
