@@ -102,48 +102,83 @@ app.post('/signup', async (req, res) => {
 });
 
 // Route: User Login
-app.post('/login', (req, res) => {
+app.post('/login', async (req, res) => {
   const { email, password } = req.body;
 
-  db.query('SELECT * FROM users WHERE email = ?', [email], async (err, results) => {
-    if (err) return res.status(500).send({ message: 'Database error' });
-    if (results.length === 0) return res.status(401).send({ message: 'Invalid credentials' });
+  try {
+    // Query to find the user by email
+    db.query('SELECT * FROM users WHERE email = ?', [email], async (err, results) => {
+      if (err) {
+        console.error('Database error:', err);
+        return res.status(500).send({ message: 'Database error' });
+      }
 
-    const user = results[0];
-    const validPassword = await bcrypt.compare(password, user.password);
-    if (!validPassword) return res.status(401).send({ message: 'Invalid credentials' });
+      // Check if the user exists
+      if (results.length === 0) {
+        return res.status(401).send({ message: 'Invalid credentials' });
+      }
 
-    const token = generateToken(user.id);
-    res.send({ token, role: user.role, credits: user.credits, id: user.id });
-  });
+      const user = results[0];
+
+      // Compare the provided password with the hashed password
+      const validPassword = await bcrypt.compare(password, user.password);
+      if (!validPassword) {
+        return res.status(401).send({ message: 'Invalid credentials' });
+      }
+
+      // Generate a token for the user
+      const token = generateToken(user.id);
+
+      // Send the token and user information
+      res.send({ token, role: user.role, credits: user.credits, id: user.id });
+    });
+
+  } catch (error) {
+    // Catch any unexpected errors
+    console.error('Unexpected error:', error);
+    res.status(500).send({ message: 'An unexpected error occurred' });
+  }
 });
 
 // Route: Get User Details
 app.get('/users/details', (req, res) => {
-  const sql = 'SELECT id, fullName, email, credits, country, state, city, whatsapp, phoneNumber, companyName FROM users';
+  try {
+    const sql = 'SELECT id, fullName, email, credits, country, state, city, whatsapp, phoneNumber, companyName FROM users';
 
-  db.query(sql, (err, results) => {
-    if (err) {
-      console.error('Error fetching users:', err);
-      return res.status(500).json({ error: 'Failed to fetch user details' });
-    }
+    db.query(sql, (err, results) => {
+      if (err) {
+        console.error('Error fetching users:', err);
+        return res.status(500).json({ error: 'Failed to fetch user details' });
+      }
 
-    res.json(results);
-  });
+      res.json(results);
+    });
+
+  } catch (error) {
+    console.error('Unexpected error:', error);
+    res.status(500).json({ error: 'An unexpected error occurred' });
+  }
 });
+
 
 // Route: Get User Credit Details
 app.get('/users-credit', (req, res) => {
-  const sql = 'SELECT id, fullName, email, credits, expirationDate, input_max, phoneNumber FROM users';
+  try {
+    const sql = 'SELECT id, fullName, email, credits, expirationDate, input_max, phoneNumber FROM users';
 
-  db.query(sql, (err, results) => {
-    if (err) {
-      console.error('Error fetching users:', err);
-      return res.status(500).json({ error: 'Failed to fetch user data' });
-    }
+    db.query(sql, (err, results) => {
+      if (err) {
+        console.error('Error fetching users:', err);
+        return res.status(500).json({ error: 'Failed to fetch user data' });
+      }
 
-    res.json(results);
-  });
+      res.json(results);
+    });
+
+  } catch (error) {
+    console.error('Unexpected error:', error);
+    res.status(500).json({ error: 'An unexpected error occurred' });
+  }
 });
 
 // Route: Update User Credit or Expiration Date
@@ -151,53 +186,68 @@ app.put('/user-credit/:id', authenticateToken, (req, res) => {
   const { id } = req.params;
   const { input_max, expirationDate } = req.body;
 
-  const updateFields = [];
-  const queryParams = [];
+  try {
+    const updateFields = [];
+    const queryParams = [];
 
-  if (input_max !== undefined) {
-    updateFields.push('input_max = ?');
-    queryParams.push(input_max);
-  }
-
-  if (expirationDate !== undefined) {
-    updateFields.push('expirationDate = ?');
-    queryParams.push(expirationDate);
-  }
-
-  if (updateFields.length === 0) {
-    return res.status(400).json({ error: 'No fields to update' });
-  }
-
-  queryParams.push(id);
-  const sqlQuery = `UPDATE users SET ${updateFields.join(', ')} WHERE id = ?`;
-
-  db.query(sqlQuery, queryParams, (err, result) => {
-    if (err) {
-      console.error('Error updating user:', err);
-      return res.status(500).json({ error: 'Failed to update user data' });
+    if (input_max !== undefined) {
+      updateFields.push('input_max = ?');
+      queryParams.push(input_max);
     }
-    res.json({ message: 'User updated successfully' });
-  });
+
+    if (expirationDate !== undefined) {
+      updateFields.push('expirationDate = ?');
+      queryParams.push(expirationDate);
+    }
+
+    if (updateFields.length === 0) {
+      return res.status(400).json({ error: 'No fields to update' });
+    }
+
+    queryParams.push(id);
+    const sqlQuery = `UPDATE users SET ${updateFields.join(', ')} WHERE id = ?`;
+
+    db.query(sqlQuery, queryParams, (err, result) => {
+      if (err) {
+        console.error('Error updating user:', err);
+        return res.status(500).json({ error: 'Failed to update user data' });
+      }
+      
+      res.json({ message: 'User updated successfully' });
+    });
+
+  } catch (error) {
+    console.error('Unexpected error:', error);
+    res.status(500).json({ error: 'An unexpected error occurred' });
+  }
 });
 
-// Route: Update User Profile
-app.get('/users-profile/:id',  (req, res) => {
+
+app.get('/users-profile/:id', async (req, res) => {
   const { id } = req.params;
+  
+  try {
+    const sql = 'SELECT id, fullName, email, phoneNumber, profilePhoto FROM users WHERE id = ?';
+    
+    db.query(sql, [id], (err, results) => {
+      if (err) {
+        console.error('Error fetching profile:', err);
+        return res.status(500).json({ error: 'Failed to fetch profile data' });
+      }
 
-  const sql = 'SELECT id, fullName, email, phoneNumber, profilePhoto FROM users WHERE id = ?';
-  db.query(sql, [id], (err, results) => {
-    if (err) {
-      console.error('Error fetching profile:', err);
-      return res.status(500).json({ error: 'Failed to fetch profile data' });
-    }
+      if (results.length === 0) {
+        return res.status(404).json({ error: 'Profile not found' });
+      }
 
-    if (results.length === 0) {
-      return res.status(404).json({ error: 'Profile not found' });
-    }
-
-    res.json(results[0]);
-  });
+      res.json(results[0]);
+    });
+    
+  } catch (error) {
+    console.error('Unexpected error:', error);
+    res.status(500).json({ error: 'An unexpected error occurred' });
+  }
 });
+
 
 // Utility functions for extraction
 const extractEmailsFromHtml = (html) => {
@@ -336,53 +386,101 @@ app.get('/api/download', (req, res) => {
 // Get user details
 app.get('/api/user/details/:id', (req, res) => {
   const userId = req.params.id;
-  db.query('SELECT credits, package, expirationDate, input_max, premium_user FROM users WHERE id = ?', [userId], (err, results) => {
-    if (err) {
-      console.error('Error fetching user details:', err);
-      return res.status(500).json({ error: 'Failed to fetch user details' });
-    }
-    res.json(results[0]);
-  });
+
+  try {
+    db.query('SELECT credits, package, expirationDate, input_max, premium_user FROM users WHERE id = ?', [userId], (err, results) => {
+      if (err) {
+        console.error('Error fetching user details:', err);
+        return res.status(500).json({ error: 'Failed to fetch user details' });
+      }
+
+      // Check if any result is returned
+      if (results.length === 0) {
+        return res.status(404).json({ error: 'User not found' });
+      }
+
+      res.json(results[0]);
+    });
+  } catch (error) {
+    console.error('Unexpected error:', error);
+    res.status(500).json({ error: 'An unexpected error occurred' });
+  }
 });
+
 
 // Log user activity
 app.post('/api/user/activity/:id', (req, res) => {
   const { urls, emailCount, phoneCount, profileCount, categoryCount } = req.body;
-  const userId = req.params.id; // Assuming user ID is extracted from token
+  const userId = req.params.id; // Assuming user ID is passed in the URL
 
-  urls.forEach((url) => {
-    db.query('INSERT INTO activity_logs (user_id, activity, timestamp) VALUES (?, ?, ?)', [userId, `Extracted data from ${url} (Emails: ${emailCount}, Phones: ${phoneCount}, Profiles: ${profileCount}, Categories: ${categoryCount})`, new Date()], (err) => {
-      if (err) console.error('Error logging activity:', err);
+  try {
+    urls.forEach((url) => {
+      db.query(
+        'INSERT INTO activity_logs (user_id, activity, timestamp) VALUES (?, ?, ?)',
+        [
+          userId,
+          `Extracted data from ${url} (Emails: ${emailCount}, Phones: ${phoneCount}, Profiles: ${profileCount}, Categories: ${categoryCount})`,
+          new Date(),
+        ],
+        (err) => {
+          if (err) {
+            console.error('Error logging activity:', err);
+            throw err; // Throw error to catch in the try-catch block
+          }
+        }
+      );
     });
-  });
 
-  res.status(200).json({ message: 'Activity logged' });
+    res.status(200).json({ message: 'Activity logged' });
+  } catch (error) {
+    console.error('Unexpected error:', error);
+    res.status(500).json({ error: 'Failed to log activity' });
+  }
 });
 
 
 // Endpoint to get all users
 app.get('/api/users_activity2', (req, res) => {
   const query = 'SELECT * FROM users';
-  db.query(query, (err, results) => {
+
+  try {
+    db.query(query, (err, results) => {
       if (err) {
-          return res.status(500).json({ error: err.message });
+        console.error('Error fetching users:', err);
+        return res.status(500).json({ error: err.message });
       }
+
       res.json(results);
-  });
+    });
+  } catch (error) {
+    console.error('Unexpected error:', error);
+    res.status(500).json({ error: 'An unexpected error occurred' });
+  }
 });
+
 
 // Endpoint to get activity logs for a specific user
 app.get('/api/activity_log/:id', (req, res) => {
-  const { id  } = req.params;
-  const query = 'SELECT * FROM activity_logs WHERE user_id  = ?';
-  db.query(query, [id ], (err, results) => {
+  const { id } = req.params;
+  const query = 'SELECT * FROM activity_logs WHERE user_id = ?';
+
+  try {
+    db.query(query, [id], (err, results) => {
       if (err) {
-          return res.status(500).json({ error: err.message });
+        console.error('Error fetching activity logs:', err);
+        return res.status(500).json({ error: err.message });
       }
-      console.log(id);
-      console.log(results);
+
+      // Log the user ID and results for debugging purposes
+      console.log(`User ID: ${id}`);
+      console.log('Activity Logs:', results);
+
       res.json(results);
-  });
+    });
+  } catch (error) {
+    console.error('Unexpected error:', error);
+    res.status(500).json({ error: 'An unexpected error occurred' });
+  }
 });
 
 

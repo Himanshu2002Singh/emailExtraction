@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import './activity_log.css';
-import { Box, Modal, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper } from '@mui/material';
+import { Box, Modal, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Typography, useMediaQuery } from '@mui/material';
+import { useTheme } from '@mui/material/styles';
 import NavbarDashboard from './NavbarDashboard';
 import ResponsiveDrawer from './Sidebar';
 
@@ -11,11 +12,13 @@ const UserActivity = () => {
   const [activityLogs, setActivityLogs] = useState([]);
   const [openModal, setOpenModal] = useState(false);
 
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
+
   useEffect(() => {
     const fetchUsers = async () => {
       try {
         const response = await axios.get('http://88.222.245.28:5000/api/users_activity2');
-        // Filter users with role 'user'
         const filteredUsers = response.data.filter(user => user.role === 'user');
         setUsers(filteredUsers);
       } catch (error) {
@@ -51,13 +54,12 @@ const UserActivity = () => {
     <div>
       <NavbarDashboard />
       <Box height={100} />
-      <Box sx={{ display: "flex" }}>
+      <Box sx={{ display: 'flex' }}>
         <ResponsiveDrawer />
         <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
-          <h1>User Activity</h1>
-          <div className="user-list">
-            <h2>Users</h2>
-            <Table component={Paper}>
+          <Typography variant="h4" gutterBottom>User Activity</Typography>
+          <TableContainer component={Paper}>
+            <Table stickyHeader>
               <TableHead>
                 <TableRow>
                   <TableCell>Name</TableCell>
@@ -67,7 +69,7 @@ const UserActivity = () => {
               </TableHead>
               <TableBody>
                 {users.map((user) => (
-                  <TableRow key={user.id} onClick={() => handleUserClick(user)} style={{ cursor: 'pointer' }}>
+                  <TableRow key={user.id} onClick={() => handleUserClick(user)} sx={{ cursor: 'pointer' }}>
                     <TableCell>{user.fullName}</TableCell>
                     <TableCell>{user.phoneNumber}</TableCell>
                     <TableCell>{user.email}</TableCell>
@@ -75,7 +77,7 @@ const UserActivity = () => {
                 ))}
               </TableBody>
             </Table>
-          </div>
+          </TableContainer>
         </Box>
       </Box>
 
@@ -85,8 +87,8 @@ const UserActivity = () => {
         aria-labelledby="user-activity-title"
         aria-describedby="user-activity-description"
       >
-        <Box sx={{ ...style, width: 900 }}>
-          <h2 id="user-activity-title">Activity Log for {selectedUser?.fullName}</h2>
+        <Box sx={{ ...style, width: isMobile ? '90%' : '80%' }}>
+          <Typography variant="h6" id="user-activity-title">Activity Log for {selectedUser?.fullName}</Typography>
           <TableContainer component={Paper} sx={{ maxHeight: 400 }}>
             <Table stickyHeader>
               <TableHead>
@@ -122,7 +124,6 @@ const style = {
   top: '50%',
   left: '50%',
   transform: 'translate(-50%, -50%)',
-  width: '80%',
   bgcolor: 'background.paper',
   border: '2px solid #000',
   boxShadow: 24,
