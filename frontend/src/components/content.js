@@ -8,7 +8,6 @@ import multiThreadedIcon from '../assets/img/data-protection.png';
 import userFriendlyIcon from '../assets/img/user-friendly.png';
 import advancedFilteringIcon from '../assets/img/advanced-filter.png';
 import affordableIcon from '../assets/img/affordable-price.png';
-import centerImage from '../assets/img/web-traffic.png';
 
 const packages = [
   {
@@ -48,17 +47,17 @@ const featuresLeft = [
   {
     icon: collectEmailIdsIcon,
     title: 'Collect Email Ids and Phone Numbers',
-    description: 'With this online tool, your email marketing campaigns are made a lot easier. You can now crawl any website, text files, scrap email addresses and phone numbers, and generate massive, filtered mailing lists for your email marketing purposes.'
+    description: 'Crawl websites, scrape email addresses and phone numbers, and create filtered mailing lists for your campaigns.'
   },
   {
     icon: deepSearchIcon,
     title: 'Deep Email Search Algorithms',
-    description: 'Our Web Email Finder tool integrates complex email search algorithms that decode any type of email format, filter them, and show you the real emails, presenting you with a duplicate-free email list.'
+    description: 'Our tool uses complex algorithms to find and filter real emails, providing a duplicate-free list.'
   },
   {
     icon: multiThreadedIcon,
     title: 'Multi-Threaded Connections',
-    description: 'Using our tool is not only convenient but faster in execution. We have implemented multithreaded connections to execute several extraction processes at a time, allowing you to extract hundreds of emails within a minute.'
+    description: 'Our multi-threaded technology speeds up the email extraction process, allowing you to extract hundreds of emails quickly.'
   }
 ];
 
@@ -66,25 +65,25 @@ const featuresRight = [
   {
     icon: userFriendlyIcon,
     title: 'User Friendly Interface',
-    description: 'We hate complications! Our platform is designed to be as user-friendly as possible. The Web Email Finder tool doesn’t require any special installation. It’s simple enough for even users with minimal computer knowledge.'
+    description: 'No special installation required. The platform is designed for ease of use, even for beginners.'
   },
   {
     icon: advancedFilteringIcon,
     title: 'Advanced Filtering Features',
-    description: 'We have included 4 email scraping modes in our software. Use any mode according to your needs. No duplicate emails! No invalid emails!'
+    description: 'Choose from 4 different scraping modes. No duplicate or invalid emails!'
   },
   {
     icon: affordableIcon,
     title: 'Affordable for Freelancers and Companies',
-    description: 'We designed our platform with everyone in mind! We provide a free trial so anyone can try our effective online email finder software. We’ve ensured the price is affordable for every user who needs it.'
+    description: 'We offer affordable plans with free trials so everyone can benefit from our email finder tool.'
   }
 ];
 
 const Packages = () => {
   return (
-    <div className="container">
+    <div className="container54">
       <h2 className="section-title">Pick a deal that’s right for you</h2>
-      <p className="section-description">We offer different web email finder packages for any type of businesses or freelancers. Choose the best one that suits your needs.</p>
+      <p className="section-description">We offer different web email finder packages for businesses and freelancers. Choose the best one for your needs.</p>
 
       <div className="packages">
         {packages.map((pkg, index) => (
@@ -96,43 +95,27 @@ const Packages = () => {
                 <li key={i}>{detail}</li>
               ))}
             </ul>
-            <button className={pkg.buttonClass}>{pkg.buttonText}</button>
+            <button className={`${pkg.buttonClass} full-width-btn`}>{pkg.buttonText}</button>
           </div>
         ))}
       </div>
 
       <div className="contact-section">
-        <p style={{color:"green"}}> <a  style={{color:"orange"}} href='//'>Contact us</a> for a <span  style={{color:'darkgreen', fontWeight:"900"}}> dedicated Email Finder Server</span>, with unlimited input limits and 10X data extraction speed.
+        <p style={{color:"green"}}> <a style={{color:"orange"}} href='//'>Contact us</a> for a <span style={{color:'darkgreen', fontWeight:"900"}}>dedicated Email Finder Server</span>, with unlimited input limits and 10X data extraction speed.
         <span style={{color:'darkgreen', fontWeight:"900"}}> Extra price: ₹1500 INR / $20 per month </span></p>
       </div>
 
       <h2 className="features-title">Email Finder Features</h2>
       <div className="features">
-        <div className="features-left">
-          {featuresLeft.map((feature, index) => (
-            <div key={index} className="feature">
-              <img src={feature.icon} alt={feature.title} className="feature-icon" />
-              <div className="feature-text">
-                <h3 className="feature-title">{feature.title}</h3>
-                <p className="feature-description">{feature.description}</p>
-              </div>
+        {featuresLeft.concat(featuresRight).map((feature, index) => (
+          <div key={index} className="feature">
+            <img src={feature.icon} alt={feature.title} className="feature-icon" />
+            <div className="feature-text">
+              <h3 className="feature-title">{feature.title}</h3>
+              <p className="feature-description">{feature.description}</p>
             </div>
-          ))}
-        </div>
-
-      
-
-        <div className="features-right">
-          {featuresRight.map((feature, index) => (
-            <div key={index} className="feature">
-              <img src={feature.icon} alt={feature.title} className="feature-icon" />
-              <div className="feature-text">
-                <h3 className="feature-title">{feature.title}</h3>
-                <p className="feature-description">{feature.description}</p>
-              </div>
-            </div>
-          ))}
-        </div>
+          </div>
+        ))}
       </div>
     </div>
   );

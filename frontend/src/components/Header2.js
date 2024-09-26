@@ -20,7 +20,9 @@ const Header2 = ({ isLoggedIn, handleLogout, credits }) => {
     <header>
       <div className="header container5">
         <div className="logo">
+          <a href="/">
           <img style={{ width: '30%' }} src={img2} alt="Logo" />
+          </a>
         </div>
 
         <input
@@ -39,11 +41,13 @@ const Header2 = ({ isLoggedIn, handleLogout, credits }) => {
             <ul>
               <li><a href="/">Home</a></li>
               <li><a href="/">Email Finder</a></li>
-              <li>
+              
+                <span className="credits">
                 <a href='#'>
                   Credits: {credits}
                 </a>
-              </li>
+                </span>
+             
               <li>
                 <a href='#'>
                  
@@ -51,25 +55,25 @@ const Header2 = ({ isLoggedIn, handleLogout, credits }) => {
                 </a>
               </li>
               {isLoggedIn ? (
-                <li className="profile-dropdown" onClick={toggleDropdown}>
-                  <FontAwesomeIcon icon={faUser} className="profile-icon" />
-                  {isDropdownOpen && (
-                    <li className="dropdown-menu">
-                        <a href="#">
-                      <li><a href="/profile">My Profile</a></li>
-                      <li><a href="/activity">Activity</a></li>
-                      <li><a href="#" onClick={handleLogout}>Logout</a></li>
-                      </a>
-                    </li>
-                  )}
-                </li>
-              ) : (
-                <li>
-                  <a href="/login">
-                    <button className="buttons5">Login/Register</button>
-                  </a>
-                </li>
-              )}
+    <li className="profile-dropdown">
+      <FontAwesomeIcon icon={faUser} className="profile-icon" onClick={toggleDropdown} />
+      {isDropdownOpen && (
+        <ul className="dropdown-menu">
+          <li><a href="/profile">My Profile</a></li>
+          <li><a href="/activity">Activity</a></li>
+          <li><a href="#" onClick={handleLogout}>Logout</a></li>
+        </ul>
+      )}
+    </li>
+  ) : (
+    <li>
+      <a href="/login">
+        <button className="buttons5">Login/Register</button>
+      </a>
+    </li>
+  )}
+
+        
             </ul>
           </nav>
         </div>

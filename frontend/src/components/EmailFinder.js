@@ -200,6 +200,7 @@ const EmailFinder = ({ id }) => {
               ></textarea>
               <div className="max-input-info">
                 <span>Max Input: {maxInput}</span>
+                <span>|| </span>
                 <span>Remaining Domains: {remainingDomains}</span>
               </div>
             </div>
@@ -235,31 +236,32 @@ const EmailFinder = ({ id }) => {
           </DragDropContext>
         </div>
         <div className="options-container">
-          <div>
-            <label>
-              <input type="checkbox" checked={extractEmails} onChange={() => toggleExtractOption('emails')} />
-              Extract Emails
-            </label>
-          </div>
-          <div>
-            <label>
-              <input type="checkbox" checked={extractProfiles} onChange={() => toggleExtractOption('profiles')} />
-              Extract Social Profiles
-            </label>
-          </div>
-          <div>
-            <label>
-              <input type="checkbox" checked={extractPhoneNumbers} onChange={() => toggleExtractOption('phoneNumbers')} />
-              Extract Phone Numbers
-            </label>
-          </div>
-          <div>
-            <label>
-              <input type="checkbox" checked={extractCategories} onChange={() => toggleExtractOption('categories')} />
-              Extract Categories
-            </label>
-          </div>
+       <div>
+       
+      <input type="checkbox" checked={extractEmails} onChange={() => toggleExtractOption('emails')} />
+      Extract Emails
+     
+       </div>
+  <div>
+    
+      <input type="checkbox" checked={extractProfiles} onChange={() => toggleExtractOption('profiles')} />
+      Extract Social Profiles
+    
+  </div>
+  <div>
+   
+      <input type="checkbox" checked={extractPhoneNumbers} onChange={() => toggleExtractOption('phoneNumbers')} />
+      Extract Phone Numbers
+    
+  </div>
+  <div>
+  
+      <input type="checkbox" checked={extractCategories} onChange={() => toggleExtractOption('categories')} />
+      Extract Categories
+   
+  </div>
         </div>
+
         <div className="button-container">
           <button className="extract-button" onClick={handleExtract}>Extract</button>
           <button className="reset-button" onClick={handleReset}>Reset</button>

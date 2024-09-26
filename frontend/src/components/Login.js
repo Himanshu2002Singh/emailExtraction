@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import axios from 'axios';
 import './Login.css';
 import { useNavigate } from 'react-router-dom';
+import login1 from "../assets/img/login.avif";
 
 const Login = ({ handleLogin }) => {
   const [email, setEmail] = useState('');
@@ -15,7 +16,6 @@ const Login = ({ handleLogin }) => {
     try {
       const response = await axios.post('http://88.222.245.28:5000/login', { email, password });
 
-      // Store token in localStorage
       localStorage.setItem('token', response.data.token);
       localStorage.setItem('credits', response.data.credits);
       localStorage.setItem('userId', response.data.id);
@@ -34,12 +34,13 @@ const Login = ({ handleLogin }) => {
   };
 
   return (
-    <div style={{marginTop:'13%'}}>
+    <div className="login-container">
       <div className="login-form">
+        <img src={login1} alt="Login" className="login-image" />
         <h2>Login</h2>
         {error && <div className="error-message">{error}</div>}
-        <form onSubmit={handleSubmit}>
-          <div>
+        <form onSubmit={handleSubmit} className="login-inputs">
+          <div className="input-group">
             <label>Email:</label>
             <input 
               type="email" 
@@ -49,7 +50,7 @@ const Login = ({ handleLogin }) => {
               placeholder="Enter your email"
             />
           </div>
-          <div>
+          <div className="input-group">
             <label>Password:</label>
             <input 
               type="password" 
@@ -59,12 +60,10 @@ const Login = ({ handleLogin }) => {
               placeholder="Enter your password"
             />
           </div>
-          <button type="submit">Login</button>
+          <button type="submit" className="login-button">Login</button>
         </form>
-        <div>
-          <br></br>
-          <br></br>
-          No Account? <a style={{color: 'red', fontSize:'18px' }} href='/signup'> Sign Up Now!</a> 
+        <div className="signup-link">
+          No Account? <a href='/signup'> Sign Up Now!</a> 
         </div>
       </div>
     </div>

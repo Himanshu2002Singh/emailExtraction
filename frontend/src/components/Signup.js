@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
-import './Header2.css';
+import './Signup.css';
+import login1 from "../assets/img/login.avif";
 
 const Signup = ({ handleLogin }) => {
   const [formData, setFormData] = useState({
@@ -20,7 +21,6 @@ const Signup = ({ handleLogin }) => {
   const [success, setSuccess] = useState('');
   const navigate = useNavigate();
 
-  // Handle form input changes
   const handleChange = (e) => {
     setFormData({
       ...formData,
@@ -28,7 +28,6 @@ const Signup = ({ handleLogin }) => {
     });
   };
 
-  // Handle form submission
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!agree) {
@@ -37,20 +36,12 @@ const Signup = ({ handleLogin }) => {
     }
 
     try {
-      // Post request to signup route
       const response = await axios.post('http://88.222.245.28:5000/signup', formData);
-
-      // Store the token and user details in local storage
       localStorage.setItem('token', response.data.token);
       localStorage.setItem('credits', response.data.credits); // Store default credits
       localStorage.setItem('userId', response.data.id); // Store user ID
-
-      // Call handleLogin with credits and userId
       handleLogin(response.data.credits, response.data.id);
-
       setSuccess('Signup successful! Redirecting to login page...');
-      
-      // Redirect to login page
       navigate('/');
     } catch (error) {
       console.error('Signup error', error);
@@ -59,91 +50,112 @@ const Signup = ({ handleLogin }) => {
   };
 
   return (
-    <div className='sign'>
+    <div className="signup-container">
       <div className="signup-form">
-        <h2>Signup</h2>
+        <img src={login1} alt="Login" className="signup-image" />
+        <h2>SIGN UP FOR NEW ACCOUNT</h2>
         {error && <div className="error-message">{error}</div>}
         {success && <div className="success-message">{success}</div>}
         <form onSubmit={handleSubmit} className="signup-grid">
-          <label>Full Name:</label>
-          <input
-            type="text"
-            name="fullName"
-            value={formData.fullName}
-            onChange={handleChange}
-            required
-          />
-          
-          <label>Email:</label>
-          <input
-            type="email"
-            name="email"
-            value={formData.email}
-            onChange={handleChange}
-            required
-          />
-          
-          <label>Password:</label>
-          <input
-            type="password"
-            name="password"
-            value={formData.password}
-            onChange={handleChange}
-            required
-          />
-
-          <label>Country:</label>
-          <input
-            type="text"
-            name="country"
-            value={formData.country}
-            onChange={handleChange}
-            required
-          />
-
-          <label>State:</label>
-          <input
-            type="text"
-            name="state"
-            value={formData.state}
-            onChange={handleChange}
-            required
-          />
-
-          <label>City:</label>
-          <input
-            type="text"
-            name="city"
-            value={formData.city}
-            onChange={handleChange}
-            required
-          />
-
-          <label>WhatsApp Number:</label>
-          <input
-            type="text"
-            name="whatsapp"
-            value={formData.whatsapp}
-            onChange={handleChange}
-          />
-
-          <label>Phone Number:</label>
-          <input
-            type="text"
-            name="phoneNumber"
-            value={formData.phoneNumber}
-            onChange={handleChange}
-            required
-          />
-
-          <label>Company Name (optional):</label>
-          <input
-            type="text"
-            name="companyName"
-            value={formData.companyName}
-            onChange={handleChange}
-          />
-
+          <div className="grid-row">
+            <div>
+              <label>First Name:</label>
+              <input
+                type="text"
+                name="fullName"
+                value={formData.fullName}
+                onChange={handleChange}
+                required
+              />
+            </div>
+            <div>
+              <label>Last Name:</label>
+              <input
+                type="text"
+                name="lastName"
+                value={formData.lastName}
+                onChange={handleChange}
+                required
+              />
+            </div>
+          </div>
+          <div className="grid-row">
+            <div>
+              <label>Email:</label>
+              <input
+                type="email"
+                name="email"
+                value={formData.email}
+                onChange={handleChange}
+                required
+              />
+            </div>
+            <div>
+              <label>Password:</label>
+              <input
+                type="password"
+                name="password"
+                value={formData.password}
+                onChange={handleChange}
+                required
+              />
+            </div>
+          </div>
+          <div className="grid-row">
+            <div>
+              <label>Country:</label>
+              <input
+                type="text"
+                name="country"
+                value={formData.country}
+                onChange={handleChange}
+                required
+              />
+            </div>
+            <div>
+              <label>State:</label>
+              <input
+                type="text"
+                name="state"
+                value={formData.state}
+                onChange={handleChange}
+                required
+              />
+            </div>
+          </div>
+          <div className="grid-row">
+            <div>
+              <label>City:</label>
+              <input
+                type="text"
+                name="city"
+                value={formData.city}
+                onChange={handleChange}
+                required
+              />
+            </div>
+            <div>
+              <label>WhatsApp Phone No.:</label>
+              <input
+                type="text"
+                name="whatsapp"
+                value={formData.whatsapp}
+                onChange={handleChange}
+              />
+            </div>
+          </div>
+          <div className="grid-row">
+            <div>
+              <label>Company Name (optional):</label>
+              <input
+                type="text"
+                name="companyName"
+                value={formData.companyName}
+                onChange={handleChange}
+              />
+            </div>
+            
+          </div>
           <div className="agree-terms">
             <input
               type="checkbox"
@@ -154,15 +166,11 @@ const Signup = ({ handleLogin }) => {
             />
             <label>I agree to the terms and conditions</label>
           </div>
-
           <button type="submit" className="register-btn">Register</button>
         </form>
-
         <div className="signin-link">
-          <br />
-          <br />
           Already have an account?
-          <a style={{ color: 'red', fontSize: '18px' }} href='/login'> Sign in Now!</a> 
+          <a style={{ color: 'red', fontSize: '18px' }} href='/login'> Sign in Now!</a>
         </div>
       </div>
     </div>
