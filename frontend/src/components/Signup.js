@@ -36,7 +36,7 @@ const Signup = ({ handleLogin }) => {
     }
 
     try {
-      const response = await axios.post('http://88.222.245.28:5000/signup', formData);
+      const response = await axios.post('https://webmailextract.com/signup', formData);
       localStorage.setItem('token', response.data.token);
       localStorage.setItem('credits', response.data.credits); // Store default credits
       localStorage.setItem('userId', response.data.id); // Store user ID

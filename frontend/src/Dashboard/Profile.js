@@ -23,7 +23,7 @@ const Profile = ({ id }) => {
 
     const fetchProfile = async () => {
       try {
-        const response = await axios.get(`http://88.222.245.28:5000/users-profile/${id}`);
+        const response = await axios.get(`https://webmailextract.com/users-profile/${id}`);
         setProfile(response.data);
         setEmail(response.data.email || '');
         setPhoneNumber(response.data.phoneNumber || '');
@@ -54,7 +54,7 @@ const Profile = ({ id }) => {
     }
 
     try {
-      await axios.put(`http://88.222.245.28:5000/users/${id}/profile`, formData, {
+      await axios.put(`https://webmailextract.com/users/${id}/profile`, formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
         },
