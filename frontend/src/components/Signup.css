@@ -45,12 +45,42 @@
     border-radius: 5px;
   }
   
-  .agree-terms {
-    display: flex;
-    align-items: center;
-    gap: 5px;
-  }
   
+  .texty {
+    display: flex;
+    align-items: center; /* Vertically aligns checkbox and text */
+     /* Adds 2px space between the checkbox and text */
+     margin-left: -80%;
+}
+
+.lity {
+    font-size: 16px; /* Adjust font size for better readability */
+    white-space: nowrap; /* Prevents text from wrapping to the next line */
+    margin-left: -48%;
+}
+
+@media (max-width: 768px) {
+    .texty {
+        font-size: 14px; /* Adjust font size for smaller screens */
+    }
+}
+
+@media (max-width: 480px) {
+    .texty {
+        font-size: 10px; /* Further adjust font size for very small screens */
+        white-space: wrap; /* Prevents text from wrapping to the next line */
+      
+       
+      
+    }
+    .lity{
+      margin-left: -42%;
+      white-space: wrap;
+    }
+}
+
+
+
   .register-btn {
     background-color: red;
     color: white;

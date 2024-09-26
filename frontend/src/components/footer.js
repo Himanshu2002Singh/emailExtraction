@@ -69,7 +69,7 @@ const Footer = () => {
           <div className="row">
             <div className="col-md-6">
               <div className="text">
-                Copyright © 2020 <a href="/"></a>. All Right Reserved
+              Copyright ©️ 2024 Web Mail Extract. <a href="/"></a>. All Right Reserved
               </div>
             </div>
           

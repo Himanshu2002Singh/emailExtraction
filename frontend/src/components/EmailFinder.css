@@ -279,31 +279,20 @@
   
 }
 
-
-
 .options-container {
   display: flex;
   flex-wrap: wrap;
   justify-content: space-between;
-
-  gap: 10px;
+  gap: 5px;
   margin: 20px 0;
 }
 
 .options-container div {
   display: flex;
-  flex-direction: column;
-  flex-wrap: wrap;
+  flex-direction: row;
   align-items: center;
   margin-right: 15px;
-}
-
-.options-container label {
-  display: flex;
-  align-items: center;
-  font-size: 18px;
-  color: #333;
-  cursor: pointer;
+  padding: 10px; /* Add padding for proper alignment */
 }
 
 .options-container input {
@@ -312,16 +301,45 @@
   transform: scale(1.2);
 }
 
-@media (max-width: 768px) {
+/* For tablets and small screens */
+@media (min-width: 800px) {
   .options-container {
-    display: flex;
-    flex-direction: row;
-    
-    display: flex;
+    justify-content: space-between;
+    gap: 7px; /* Increase the gap for better spacing */
   }
 
   .options-container div {
+  /* Show two items per row by using 48% width */
+ 
     margin-right: 0;
     margin-bottom: 10px;
+    white-space: nowrap;
+  }
+}
+
+
+/* For tablets and small screens */
+@media (max-width: 768px) {
+  .options-container {
+    justify-content: space-between;
+    gap: 10px; /* Increase the gap for better spacing */
+  }
+
+  .options-container div {
+  /* Show two items per row by using 48% width */
+    margin-right: 0;
+    margin-bottom: 10px;
+    white-space: nowrap;
+  }
+}
+
+/* For phones and very small screens */
+@media (max-width: 480px) {
+  .options-container div {
+    width: 51%; /* Maintain two items per row on phone screens */
+    padding: 8px; /* Adjust padding for smaller screens */
+    margin-bottom: 10px; /* Add margin between rows */
+    white-space: nowrap;
+   
   }
 }

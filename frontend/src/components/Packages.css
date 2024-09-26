@@ -115,6 +115,10 @@ p {
   margin-bottom: 10px;
 }
 
+.feature-description{
+  text-align: left;
+}
+
 .features .feature h3 {
   color: #333;
   font-size: 22px;

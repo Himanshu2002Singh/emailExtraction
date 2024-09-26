@@ -42,6 +42,7 @@ const Login = ({ handleLogin }) => {
         <form onSubmit={handleSubmit} className="login-inputs">
           <div className="input-group">
             <label>Email:</label>
+            
             <input 
               type="email" 
               value={email} 

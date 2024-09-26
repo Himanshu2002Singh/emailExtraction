@@ -156,7 +156,8 @@ const Signup = ({ handleLogin }) => {
             </div>
             
           </div>
-          <div className="agree-terms">
+       
+            <div className='texty'>
             <input
               type="checkbox"
               name="agree"
@@ -164,7 +165,8 @@ const Signup = ({ handleLogin }) => {
               onChange={(e) => setAgree(e.target.checked)}
               required
             />
-            <label>I agree to the terms and conditions</label>
+            
+            <div  className='lity'>I agree to the terms and conditions</div>
           </div>
           <button type="submit" className="register-btn">Register</button>
         </form>
