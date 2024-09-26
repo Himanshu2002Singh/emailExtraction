@@ -11,6 +11,7 @@ import UserDetails from './Dashboard/userdetails';
 import UpdateCredit from './Dashboard/UpdateCredits';
 import Profile from './Dashboard/Profile';
 import UserActivity from './Dashboard/Acriviry_log';
+import PrivateRoute from './components/PrivateRoutes';
 
 const App = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -22,7 +23,7 @@ const App = () => {
     setCredits(newCredits);
     setId(id);
   };
-  
+
   const handleLogout = () => {
     localStorage.removeItem('token');
     setIsLoggedIn(false);
@@ -41,17 +42,38 @@ const App = () => {
       <Routes>
         <Route path="/login" element={<Login handleLogin={handleLogin} />} />
         <Route path="/signup" element={<Signup handleLogin={handleLogin} />} />
-        <Route path="/" element={<EmailFinder  id={id}/>} />
-        <Route path="/admin" element={<Dashboard  handleLogout={handleLogout}/>} />
-        <Route path='/admin-user-details' element={<UserDetails />} />
-        <Route path='/admin-add-credits' element={<UpdateCredit />} />
-        <Route path='/admin-user-activity' element={<UserActivity/>} />
+        <Route path="/" element={<EmailFinder id={id} />} />
 
-        {/* Only render Profile if id is defined */}
-        <Route 
-          path="/admin-profile" 
-          element={id ? <Profile id={id} /> : <Navigate to="/login" />} 
-        />
+        {/* Protecting Admin Routes */}
+        <Route path="/admin" element={
+          <PrivateRoute isLoggedIn={isLoggedIn}>
+            <Dashboard handleLogout={handleLogout} />
+          </PrivateRoute>
+        } />
+
+        <Route path="/admin-user-details" element={
+          <PrivateRoute isLoggedIn={isLoggedIn}>
+            <UserDetails />
+          </PrivateRoute>
+        } />
+
+        <Route path="/admin-add-credits" element={
+          <PrivateRoute isLoggedIn={isLoggedIn}>
+            <UpdateCredit />
+          </PrivateRoute>
+        } />
+
+        <Route path="/admin-user-activity" element={
+          <PrivateRoute isLoggedIn={isLoggedIn}>
+            <UserActivity />
+          </PrivateRoute>
+        } />
+
+        <Route path="/admin-profile" element={
+          <PrivateRoute isLoggedIn={isLoggedIn}>
+            <Profile id={id} />
+          </PrivateRoute>
+        } />
       </Routes>
       {!isOnAdminPage && (
         <Footer />
