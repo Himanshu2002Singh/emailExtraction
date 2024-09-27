@@ -141,7 +141,7 @@ app.post('/login', async (req, res) => {
 });
 
 // Route: Get User Details
-app.get('/users/details', (req, res) => {
+app.get('/admin-user-details', (req, res) => {
   try {
     const sql = 'SELECT id, fullName, email, credits, country, state, city, whatsapp, phoneNumber, companyName FROM users';
 
@@ -162,7 +162,7 @@ app.get('/users/details', (req, res) => {
 
 
 // Route: Get User Credit Details
-app.get('/users-credit', (req, res) => {
+app.get('/admin-add-credits', (req, res) => {
   try {
     const sql = 'SELECT id, fullName, email, credits, expirationDate, input_max, phoneNumber FROM users';
 
@@ -182,7 +182,7 @@ app.get('/users-credit', (req, res) => {
 });
 
 // Route: Update User Credit or Expiration Date
-app.put('/user-credit/:id', authenticateToken, (req, res) => {
+app.put('/admin-add-credits/:id', authenticateToken, (req, res) => {
   const { id } = req.params;
   const { input_max, expirationDate } = req.body;
 
@@ -223,7 +223,7 @@ app.put('/user-credit/:id', authenticateToken, (req, res) => {
 });
 
 
-app.get('/users-profile/:id', async (req, res) => {
+app.get('/admin-profile/:id', async (req, res) => {
   const { id } = req.params;
   
   try {
@@ -294,7 +294,7 @@ const extractCategoriesFromHtml = (html) => {
 };
 
 // Extraction endpoint
-app.post('/api/extract/:id', async (req, res) => {
+app.post('/:id', async (req, res) => {
   const { urls, extractEmails, extractProfiles, extractPhoneNumbers, extractCategories } = req.body;
 
   try {
@@ -384,7 +384,7 @@ app.get('/api/download', (req, res) => {
 });
 
 // Get user details
-app.get('/api/user/details/:id', (req, res) => {
+app.get('/admin-user-details/:id', (req, res) => {
   const userId = req.params.id;
 
   try {
@@ -409,7 +409,7 @@ app.get('/api/user/details/:id', (req, res) => {
 
 
 // Log user activity
-app.post('/api/user/activity/:id', (req, res) => {
+app.post('/admin-user-activity/:id', (req, res) => {
   const { urls, emailCount, phoneCount, profileCount, categoryCount } = req.body;
   const userId = req.params.id; // Assuming user ID is passed in the URL
 
