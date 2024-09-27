@@ -13,7 +13,7 @@ const UpdateCredit = () => {
   useEffect(() => {
     const fetchUsers = async () => {
       try {
-        const response = await axios.get('https://webmailextract.com/admin-add-credits');
+        const response = await axios.get('https://webmailextract.com/users-credit');
         setUsers(response.data);
         setLoading(false);
       } catch (error) {
@@ -27,7 +27,7 @@ const UpdateCredit = () => {
 
   const handleUpdate = async (userId, field, value) => {
     try {
-      await axios.put(`https://webmailextract.com/admin-add-credits/${userId}`, { [field]: value });
+      await axios.put(`https://webmailextract.com/user-credit/${userId}`, { [field]: value });
       alert('User updated successfully');
     } catch (error) {
       alert('Error updating user');

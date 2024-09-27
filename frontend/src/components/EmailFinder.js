@@ -39,7 +39,7 @@ const EmailFinder = ({ id }) => {
       const token = localStorage.getItem('token');
       if (token) {
         try {
-          const response = await axios.get(`https://webmailextract.com/admin-user-details/${id}`);
+          const response = await axios.get(`https://webmailextract.com/api/user/details/${id}`);
           const { package: userPackage, credits, expirationDate, input_max: maxInput, premium_user: premium } = response.data;
 
           setUserPackage(userPackage);
@@ -92,7 +92,7 @@ const EmailFinder = ({ id }) => {
   const performExtraction = async (token) => {
     const domainList = urls.split('\n').slice(0, maxInput);
     try {
-      const response = await axios.post(`https://webmailextract.com/${id}`, {
+      const response = await axios.post(`https://webmailextract.com/api/extract/${id}`, {
         urls: domainList,
         extractEmails,
         extractProfiles,
@@ -109,7 +109,7 @@ const EmailFinder = ({ id }) => {
       setModalIsOpen(true);
       setRemainingDomains(prev => prev - domainList.length);
 
-      await axios.post(`https://webmailextract.com/admin-user-activity/${id}`, {
+      await axios.post(`https://webmailextract.com/api/user/activity/${id}`, {
         urls: domainList,
         emailCount: response.data.emails.length,
         phoneCount: response.data.phoneNumbers.length,
