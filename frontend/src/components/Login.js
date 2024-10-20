@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-import './Login.css';
+import './Login.css'; // The updated CSS file with placeholder icons
 import { useNavigate } from 'react-router-dom';
-import login1 from "../assets/img/login.avif";
+import login1 from "../assets/img/login.avif"; // Assuming this is the image path
 
 const Login = ({ handleLogin }) => {
   const [email, setEmail] = useState('');
@@ -25,7 +25,7 @@ const Login = ({ handleLogin }) => {
       if (response.data.role === 'admin') {
         navigate('/admin');
       } else {
-        navigate('/');
+        navigate('/');                                                
       }
     } catch (error) {
       console.error('Login error', error);
@@ -35,36 +35,45 @@ const Login = ({ handleLogin }) => {
 
   return (
     <div className="login-container">
-      <div className="login-form">
-        <img src={login1} alt="Login" className="login-image" />
-        <h2>Login</h2>
+      <div className="login-box">
+        <h2 className="login-title">WebMailExtractor</h2>
+        <p className="login-subtitle">Login to User /Admin Panel</p>
         {error && <div className="error-message">{error}</div>}
         <form onSubmit={handleSubmit} className="login-inputs">
           <div className="input-group">
-            <label>Email:</label>
-            
-            <input 
-              type="email" 
-              value={email} 
-              onChange={(e) => setEmail(e.target.value)} 
-              required 
-              placeholder="Enter your email"
-            />
+            <div className="input-wrapper">
+              <i className="fas fa-envelope input-icon"></i>
+              <input 
+                type="email" 
+                value={email} 
+                onChange={(e) => setEmail(e.target.value)} 
+                required 
+                placeholder="Email"
+              />
+            </div>
           </div>
           <div className="input-group">
-            <label>Password:</label>
-            <input 
-              type="password" 
-              value={password} 
-              onChange={(e) => setPassword(e.target.value)} 
-              required 
-              placeholder="Enter your password"
-            />
+            <div className="input-wrapper">
+              <i className="fas fa-lock input-icon"></i>
+              <input 
+                type="password" 
+                value={password} 
+                onChange={(e) => setPassword(e.target.value)} 
+                required 
+                placeholder="Password"
+              />
+            </div>
+          </div>
+          <div className="login-options">
+            <div className="remember-me">
+              <input type="checkbox" id="rememberMe" />
+              <label htmlFor="rememberMe">Remember Me</label>
+            </div>
           </div>
           <button type="submit" className="login-button">Login</button>
         </form>
         <div className="signup-link">
-          No Account? <a href='/signup'> Sign Up Now!</a> 
+          <p>Don't have any account? <a href='/signup'>Signup</a></p>
         </div>
       </div>
     </div>

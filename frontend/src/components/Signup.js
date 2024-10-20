@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
-import './Signup.css';
-import login1 from "../assets/img/login.avif";
+import './Signup.css';  // Ensure you have the CSS styles updated as per your requirements
+import login1 from "../assets/img/login.avif";  // You can remove this if the image is not needed
 
 const Signup = ({ handleLogin }) => {
   const [formData, setFormData] = useState({
@@ -16,7 +16,6 @@ const Signup = ({ handleLogin }) => {
     phoneNumber: '',
     companyName: '',
   });
-  const [agree, setAgree] = useState(false);
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
   const navigate = useNavigate();
@@ -30,21 +29,14 @@ const Signup = ({ handleLogin }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!agree) {
-      setError('You must agree to the terms and conditions');
-      return;
-    }
 
     try {
       const response = await axios.post('https://webmailextract.com/signup', formData);
       localStorage.setItem('token', response.data.token);
-      localStorage.setItem('credits', response.data.credits); // Store default credits
-      localStorage.setItem('userId', response.data.id); // Store user ID
       handleLogin(response.data.credits, response.data.id);
-      setSuccess('Signup successful! Redirecting to login page...');
-      navigate('/');
+      setSuccess('Signup successful! Redirecting...');
+      navigate('/email/finder');
     } catch (error) {
-      console.error('Signup error', error);
       setError('Error signing up');
     }
   };
@@ -52,127 +44,112 @@ const Signup = ({ handleLogin }) => {
   return (
     <div className="signup-container">
       <div className="signup-form">
-        <img src={login1} alt="Login" className="signup-image" />
-        <h2>SIGN UP FOR NEW ACCOUNT</h2>
+        <h2 className="signup-title">WEBMAILEXTRACTOR</h2>
+        <p className="signup-subtitle">Create an account</p>
         {error && <div className="error-message">{error}</div>}
         {success && <div className="success-message">{success}</div>}
-        <form onSubmit={handleSubmit} className="signup-grid">
-          <div className="grid-row">
-            <div>
-              <label>First Name:</label>
-              <input
-                type="text"
-                name="fullName"
-                value={formData.fullName}
-                onChange={handleChange}
-                required
-              />
-            </div>
-            <div>
-              <label>Last Name:</label>
-              <input
-                type="text"
-                name="lastName"
-                value={formData.lastName}
-                onChange={handleChange}
-                required
-              />
-            </div>
-          </div>
-          <div className="grid-row">
-            <div>
-              <label>Email:</label>
-              <input
-                type="email"
-                name="email"
-                value={formData.email}
-                onChange={handleChange}
-                required
-              />
-            </div>
-            <div>
-              <label>Password:</label>
-              <input
-                type="password"
-                name="password"
-                value={formData.password}
-                onChange={handleChange}
-                required
-              />
-            </div>
-          </div>
-          <div className="grid-row">
-            <div>
-              <label>Country:</label>
-              <input
-                type="text"
-                name="country"
-                value={formData.country}
-                onChange={handleChange}
-                required
-              />
-            </div>
-            <div>
-              <label>State:</label>
-              <input
-                type="text"
-                name="state"
-                value={formData.state}
-                onChange={handleChange}
-                required
-              />
-            </div>
-          </div>
-          <div className="grid-row">
-            <div>
-              <label>City:</label>
-              <input
-                type="text"
-                name="city"
-                value={formData.city}
-                onChange={handleChange}
-                required
-              />
-            </div>
-            <div>
-              <label>WhatsApp Phone No.:</label>
-              <input
-                type="text"
-                name="whatsapp"
-                value={formData.whatsapp}
-                onChange={handleChange}
-              />
-            </div>
-          </div>
-          <div className="grid-row">
-            <div>
-              <label>Company Name (optional):</label>
-              <input
-                type="text"
-                name="companyName"
-                value={formData.companyName}
-                onChange={handleChange}
-              />
-            </div>
-            
-          </div>
-       
-            <div className='texty'>
+        <form onSubmit={handleSubmit} className="signup-inputs">
+          <div className="input-group2">
             <input
-              type="checkbox"
-              name="agree"
-              checked={agree}
-              onChange={(e) => setAgree(e.target.checked)}
+              type="text"
+              name="fullName"
+              value={formData.fullName}
+              onChange={handleChange}
               required
+              placeholder="Full Name"
             />
-            
-            <div  className='lity'>I agree to the terms and conditions</div>
+            <i className="fa fa-user"></i>
           </div>
-          <button type="submit" className="register-btn">Register</button>
+          <div className="input-group2">
+            <input
+              type="email"
+              name="email"
+              value={formData.email}
+              onChange={handleChange}
+              required
+              placeholder="Email"
+            />
+            <i className="fa fa-envelope"></i>
+          </div>
+          <div className="input-group2">
+            <input
+              type="password"
+              name="password"
+              value={formData.password}
+              onChange={handleChange}
+              required
+              placeholder="Password"
+            />
+            <i className="fa fa-lock"></i>
+          </div>
+          <div className="input-group2">
+            <input
+              type="text"
+              name="country"
+              value={formData.country}
+              onChange={handleChange}
+              required
+              placeholder="Country"
+            />
+            <i className="fa fa-globe"></i>
+          </div>
+          <div className="input-group2">
+            <input
+              type="text"
+              name="state"
+              value={formData.state}
+              onChange={handleChange}
+              required
+              placeholder="State"
+            />
+            <i className="fa fa-map-marker-alt"></i>
+          </div>
+          <div className="input-group2">
+            <input
+              type="text"
+              name="city"
+              value={formData.city}
+              onChange={handleChange}
+              required
+              placeholder="City"
+            />
+            <i className="fa fa-city"></i>
+          </div>
+          <div className="input-group2">
+            <input
+              type="text"
+              name="whatsapp"
+              value={formData.whatsapp}
+              onChange={handleChange}
+              placeholder="WhatsApp"
+            />
+            <i className="fa fa-whatsapp"></i>
+          </div>
+          <div className="input-group2">
+            <input
+              type="text"
+              name="phoneNumber"
+              value={formData.phoneNumber}
+              onChange={handleChange}
+              required
+              placeholder="Phone Number"
+            />
+            <i className="fa fa-phone"></i>
+          </div>
+          <div className="input-group2">
+            <input
+              type="text"
+              name="companyName"
+              value={formData.companyName}
+              onChange={handleChange}
+              placeholder="Company Name (optional)"
+            />
+            <i className="fa fa-building"></i>
+          </div>
+          <button type="submit" className="signup-button">Signup</button>
         </form>
-        <div className="signin-link">
-          Already have an account?
-          <a style={{ color: 'red', fontSize: '18px' }} href='/login'> Sign in Now!</a>
+        <div className="login-link">
+          Already have an account? <a href="/login">Login</a>
         </div>
       </div>
     </div>

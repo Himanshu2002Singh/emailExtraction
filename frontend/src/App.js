@@ -12,6 +12,8 @@ import UpdateCredit from './Dashboard/UpdateCredits';
 import Profile from './Dashboard/Profile';
 import UserActivity from './Dashboard/Acriviry_log';
 import PrivateRoute from './components/PrivateRoutes';
+import Website from './Website3';
+
 
 const App = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -40,9 +42,10 @@ const App = () => {
         <Header2 isLoggedIn={isLoggedIn} handleLogout={handleLogout} credits={credits} />
       )}
       <Routes>
+        <Route path='/' element={<Website/>}/>
         <Route path="/login" element={<Login handleLogin={handleLogin} />} />
         <Route path="/signup" element={<Signup handleLogin={handleLogin} />} />
-        <Route path="/" element={<EmailFinder id={id} />} />
+        <Route path="/email/finder" element={<EmailFinder id={id} />} />
 
         {/* Protecting Admin Routes */}
         <Route path="/admin" element={

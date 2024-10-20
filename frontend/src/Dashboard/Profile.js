@@ -23,7 +23,7 @@ const Profile = ({ id }) => {
 
     const fetchProfile = async () => {
       try {
-        const response = await axios.get(`https://webmailextract.com/users-profile/${id}`);
+        const response = await axios.get(`http://localhost:5000/users-profile/${id}`);
         setProfile(response.data);
         setEmail(response.data.email || '');
         setPhoneNumber(response.data.phoneNumber || '');

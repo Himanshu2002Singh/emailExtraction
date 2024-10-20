@@ -1,0 +1,145 @@
+/* Global styles */
+  
+  
+  .home-description {
+    font-size: 1.1rem;
+    color: #555;
+    line-height: 2;
+    text-align: left;
+    padding-left: 150px;
+    padding-bottom: 20px;
+
+  }
+
+  .home-title{
+    text-align: left;
+    font-weight: 800;
+    padding-left: 150px;
+    padding-bottom: 20px;
+  }
+  
+  /* Featured tools section */
+  .featured-tools-section {
+    background-color: #fff7005b;
+    padding: 50px 20px;
+  }
+  
+  .tools-title {
+    text-align: center;
+    font-size: 2rem;
+    font-weight: bold;
+    margin-bottom: 40px;
+    position: relative;
+  }
+  
+  .tools-title::after {
+    content: '';
+    display: block;
+    width: 60px;
+    height: 3px;
+    background-color: #ffcc00;
+    margin: 10px auto 0;
+  }
+  
+  .tools-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 20px;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+  
+  .tool-card {
+    background-color: #fff;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+    padding: 30px;
+    text-align: center;
+    transition: transform 0.3s;
+  }
+  
+  .tool-card:hover {
+    transform: translateY(-10px);
+  }
+  
+  .tool-icon {
+    width: 80px;
+    height: 80px;
+    margin-bottom: 20px;
+  }
+  
+  .tool-title {
+    font-size: 1.5rem;
+    color: #333;
+    margin-bottom: 10px;
+  }
+  
+  .tool-description {
+    font-size: 1rem;
+    color: #666;
+    margin-bottom: 20px;
+  }
+  
+  .tool-button {
+    display: inline-block;
+    padding: 10px 20px;
+    background-color: #ff5733;
+    color: #fff;
+    border-radius: 25px;
+    text-decoration: none;
+    font-size: 1rem;
+    transition: background-color 0.3s;
+  }
+  
+  .tool-button:hover {
+    background-color: #e14a20;
+  }
+  
+  /* Responsive styles */
+  @media (max-width: 768px) {
+    .home-title {
+      font-size: 2rem;
+      text-align: left;
+      padding-left: 15px;
+    }
+  
+    .home-description {
+      font-size: 1rem;
+      padding-left: 15px;
+      text-align: left;
+    }
+  
+    .tool-card {
+      padding: 20px;
+    }
+  
+    .tool-icon {
+      width: 60px;
+      height: 60px;
+    }
+  
+    .tool-title {
+      font-size: 1.3rem;
+    }
+  
+    .tool-description {
+      font-size: 0.9rem;
+    }
+  
+    .tool-button {
+      font-size: 0.9rem;
+    }
+  }
+  
+  @media (max-width: 480px) {
+    .home-title {
+      font-size: 1.7rem;
+      text-align: left;
+      padding-left: 15px;
+    }
+  
+    .tools-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+  

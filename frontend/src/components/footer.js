@@ -1,5 +1,6 @@
 import React from 'react';
 import './footer.css';
+import payment from '../assets/img/payment-methods.webp'
 
 const Footer = () => {
   return (
@@ -8,7 +9,7 @@ const Footer = () => {
       <div className="container">
         <div className="row">
           <div className="col-md-3">
-            <div className="footer-header">About </div>
+            <div className="footer-header">About WME </div>
             <div className="footer-content">
               <p>Compnay is managed by individual dedicated developers in India. The aim of developing the tools is to grow our customers business. We believe that Our Customer Success is Our Success!</p>
               <p><i> Founder</i></p>
@@ -44,10 +45,10 @@ const Footer = () => {
             <div className="footer-content bg-white">
               <div style={{ display: 'inline-block', maxWidth: '100%', overflow: 'hidden', position: 'relative', boxSizing: 'border-box', margin: 0 }}>
                 <div style={{ boxSizing: 'border-box', display: 'block', maxWidth: '100%' }}>
-                  <img style={{ maxWidth: '100%', display: 'block', margin: 0, border: 'none', padding: 0 }} alt="" aria-hidden="true" role="presentation" src="" />
+                  <img style={{ maxWidth: '100%', display: 'block', margin: 0, border: 'none', padding: 0 }} alt="" aria-hidden="true" role="presentation" src={payment} />
                 </div>
                 <noscript>
-                  <img style={{ position: 'absolute', top: 0, left: 0, bottom: 0, right: 0, boxSizing: 'border-box', padding: 0, border: 'none', margin: 'auto', display: 'block', width: 0, height: 0, minWidth: '100%', maxWidth: '100%', minHeight: '100%', maxHeight: '100%' }} alt="We Accept" srcSet="/_next/image?url=%2Fimages%2Fweb%2Fpayment-methods.png&amp;w=384&amp;q=75 1x, /_next/image?url=%2Fimages%2Fweb%2Fpayment-methods.png&amp;w=750&amp;q=75 2x" src="/images/web/payment-methods.png" decoding="async" className="img-fluid" />
+                  <img style={{ position: 'absolute', top: 0, left: 0, bottom: 0, right: 0, boxSizing: 'border-box', padding: 0, border: 'none', margin: 'auto', display: 'block', width: 0, height: 0, minWidth: '100%', maxWidth: '100%', minHeight: '100%', maxHeight: '100%' }} alt="We Accept" srcSet="/_next/image?url=%2Fimages%2Fweb%2Fpayment-methods.png&amp;w=384&amp;q=75 1x, /_next/image?url=%2Fimages%2Fweb%2Fpayment-methods.png&amp;w=750&amp;q=75 2x" src={payment} decoding="async" className="img-fluid" />
                 </noscript>
                 <img style={{ position: 'absolute', top: 0, left: 0, bottom: 0, right: 0, boxSizing: 'border-box', padding: 0, border: 'none', margin: 'auto', display: 'block', width: 0, height: 0, minWidth: '100%', maxWidth: '100%', minHeight: '100%', maxHeight: '100%' }} alt="We Accept" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" decoding="async" className="img-fluid" />
               </div>
