@@ -33,7 +33,7 @@ p {
 
 .package:hover {
   transform: translateY(-10px);
-  background-color: #007bff;
+  background-color: #375E97;
   color: white;
 }
 
@@ -51,7 +51,7 @@ p {
 }
 
 .full-width-btn {
-  background-color: rgb(51, 51, 197);
+  background-color: #375E97;
   border: none;
   color: #fff;
   padding: 12px 20px;
@@ -63,7 +63,7 @@ p {
 }
 
 .full-width-btn:hover {
-  background-color: #6e27e1;
+  background-color: #375E99;
 }
 
 .contact-section {

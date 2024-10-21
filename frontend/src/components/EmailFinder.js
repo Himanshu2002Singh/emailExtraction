@@ -371,7 +371,7 @@ try {
                 </div>
 
                 {/* Button to download the table as PDF */}
-                <button onClick={handleDownloadPDF} className="btn btn-danger mt-3">
+                <button onClick={handleDownloadPDF} className="btn btn-primary mt-3">
                     Download as PDF
                 </button>
             </>

@@ -12531,7 +12531,7 @@ th[role=columnheader]:not(.no-sort):hover:after {
 
 .drag-sort .sort-wrapper .inner {
   margin: 5px;
-  background: #dc3545;
+  background: #375E97;
   color: #fff;
   padding: 4px 10px;
   font-size: 14px;
@@ -12857,7 +12857,7 @@ th[role=columnheader]:not(.no-sort):hover:after {
     --indigo: #6610f2;
     --purple: #6f42c1;
     --pink: #e83e8c;
-    --red: #dc3545;
+    --red: #375E97;
     --orange: #fd7e14;
     --yellow: #ffc107;
     --green: #28a745;
@@ -25365,7 +25365,7 @@ th[role=columnheader]:not(.no-sort):hover:after {
 
 .drag-sort .sort-wrapper .inner {
     margin: 5px;
-    background: #dc3545;
+    background: #375E97;
     color: #fff;
     padding: 4px 10px;
     font-size: 14px;

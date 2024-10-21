@@ -18,7 +18,7 @@
 }
 
 .business-leads-section a {
-    color: #0066cc;
+    color: #375E97;
     text-decoration: underline;
 }
 
@@ -46,7 +46,7 @@
 }
 
 .contact-form .btn {
-    background-color: #e63946;
+    background-color: #375E97;
     color: #fff;
     padding: 10px 20px;
     border: none;
@@ -54,7 +54,7 @@
 }
 
 .contact-form .btn:hover {
-    background-color: #d62839;
+    background-color: #375E97;
 }
 
 /* Responsive Design */

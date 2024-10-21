@@ -63,8 +63,8 @@
   }
   
   .tool-icon {
-    width: 80px;
-    height: 80px;
+    width: 100px;
+    height: 100px;
     margin-bottom: 20px;
   }
   
@@ -83,7 +83,7 @@
   .tool-button {
     display: inline-block;
     padding: 10px 20px;
-    background-color: #ff5733;
+    background-color: #375E97;
     color: #fff;
     border-radius: 25px;
     text-decoration: none;
@@ -92,7 +92,7 @@
   }
   
   .tool-button:hover {
-    background-color: #e14a20;
+    background-color: #375E99;
   }
   
   /* Responsive styles */

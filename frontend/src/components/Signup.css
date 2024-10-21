@@ -30,7 +30,7 @@
 }
 
 .error-message {
-  color: red;
+  color: #375E97;
   margin-bottom: 10px;
 }
 
@@ -68,7 +68,7 @@
 .signup-button {
   width: 100%;
   padding: 10px;
-  background-color: #28a745;
+  background-color: #375E97;
   border: none;
   color: white;
   font-size: 16px;
@@ -77,7 +77,7 @@
 }
 
 .signup-button:hover {
-  background-color: #218838;
+  background-color: #375E99;
 }
 
 .login-link {
