@@ -86,6 +86,42 @@ const EmailFinder = ({id}) => {
     fetchUserDetails();
 }, [id]);
 
+
+// CSV Download function
+const handleDownloadCSV = () => {
+    // Prepare the CSV content
+    const headers = ['Domain', 'Email', 'Phone Number', 'Social Media', 'Category'];
+    const rows = extractionResults.map(result => [
+      result.domain,
+      result.emails.length > 0 ? result.emails.join('; ') : 'N/A',
+      result.phones.length > 0
+        ? result.phones.filter(phone => /^[0-9]{10,15}$/.test(phone)).join('; ')
+        : 'N/A',
+      result.socialMedia.length > 0 ? result.socialMedia.join('; ') : 'N/A',
+      result.category || 'N/A'
+    ]);
+
+    // Combine headers and rows into CSV format
+    let csvContent = headers.join(',') + '\n' + rows.map(row => row.join(',')).join('\n');
+
+    // Create a Blob with the CSV content
+    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+
+    // Create a link to download the CSV file
+    const link = document.createElement('a');
+    const url = URL.createObjectURL(blob);
+    link.setAttribute('href', url);
+    link.setAttribute('download', 'extracted-results.csv');
+
+    // Append link to the body and trigger the download
+    document.body.appendChild(link);
+    link.click();
+
+    // Clean up the link after download
+    document.body.removeChild(link);
+  };
+
+
 // Perform extraction with API call
 const performExtraction = async () => {
     setLoading(true);
@@ -371,9 +407,10 @@ try {
                 </div>
 
                 {/* Button to download the table as PDF */}
-                <button onClick={handleDownloadPDF} className="btn btn-primary mt-3">
-                    Download as PDF
-                </button>
+                {/* Button to download CSV */}
+      <button type="button" className="btn btn-success ml-2" onClick={handleDownloadCSV}>
+        Download CSV
+      </button>
             </>
         )}
     </div>
