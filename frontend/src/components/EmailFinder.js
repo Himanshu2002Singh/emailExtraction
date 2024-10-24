@@ -360,6 +360,9 @@ try {
             <div className="container mt-5">
         {extractionResults.length > 0 && (
             <>
+              <button type="button" className="btn btn-success ml-2" onClick={handleDownloadCSV}>
+        Download CSV
+      </button>
                 <h2>Extracted Results</h2>
 
                 {/* Table is wrapped in table-responsive to make it responsive */}
@@ -408,9 +411,9 @@ try {
 
                 {/* Button to download the table as PDF */}
                 {/* Button to download CSV */}
-      <button type="button" className="btn btn-success ml-2" onClick={handleDownloadCSV}>
+      {/* <button type="button" className="btn btn-success ml-2" onClick={handleDownloadCSV}>
         Download CSV
-      </button>
+      </button> */}
             </>
         )}
     </div>
