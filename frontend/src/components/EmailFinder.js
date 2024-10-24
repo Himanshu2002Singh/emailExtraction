@@ -67,7 +67,7 @@ const EmailFinder = ({id}) => {
         const token = localStorage.getItem('token');
         if (token) {
             try {
-                const response = await axios.get(`http://localhost:5000/api/user/details/${id}`);
+                const response = await axios.get(`https://webmailextract.com/api/user/details/${id}`);
                 const { package: userPackage, credits, expirationDate, input_max: maxInput, premium_user: premium } = response.data;
 
                 setUserPackage(userPackage);
@@ -99,7 +99,7 @@ const performExtraction = async () => {
 
 // Assuming the response structure has domains, emails, phones, and profiles
 try {
-    const response = await axios.post(`http://localhost:5000/api/extract/${id}`, {
+    const response = await axios.post(`https://webmailextract.com/api/extract/${id}`, {
         urls: domainList,
         extractEmails: maxEmails,
         extractProfiles: extractSocialMedia,
@@ -123,7 +123,7 @@ try {
     setCredits((prev) => prev - domainList.length);
 
     // Log activity
-    await axios.post(`http://localhost:5000/api/user/activity/${id}`, {
+    await axios.post(`https://webmailextract.com/api/user/activity/${id}`, {
         urls: domainList,
         emailCount: response.data.emails?.length || 0,
         phoneCount: response.data.phones?.length || 0,
