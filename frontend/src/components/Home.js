@@ -7,6 +7,7 @@ import zdnet from '../assets/img/zdnet.webp';
 import cnet from '../assets/img/cnet.webp';
 import sourceforge from '../assets/img/sourceforge.webp';
 import software34 from '../assets/img/software-suggest.webp';
+import img2 from '../assets/img/homepg.png';
 
 function Home() {
   return (
@@ -26,7 +27,7 @@ function Home() {
           </div>
         </div>
         <div className="image-container">
-          <img src="your-image.jpg" alt="Business Meeting" />
+          <img src={img2} alt="Business Meeting" />
         </div>
       </section>
 
