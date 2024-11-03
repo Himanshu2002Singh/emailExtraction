@@ -100,9 +100,14 @@ app.post('/signup', async (req, res) => {
   }
 });
 
-// Route: User Login
+
 app.post('/login', async (req, res) => {
   const { email, password } = req.body;
+
+  // Check if email and password are provided
+  if (!email || !password) {
+    return res.status(400).send({ message: 'Email and password are required' });
+  }
 
   try {
     // Query to find the user by email
@@ -136,7 +141,7 @@ app.post('/login', async (req, res) => {
     // Catch any unexpected errors
     console.error('Unexpected error:', error);
     res.status(500).send({ message: 'An unexpected error occurred' });
-  }
+  }  
 });
 
 // Route: Get User Details
