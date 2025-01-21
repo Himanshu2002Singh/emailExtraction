@@ -13,6 +13,8 @@ import Profile from './Dashboard/Profile';
 import UserActivity from './Dashboard/Acriviry_log';
 import PrivateRoute from './components/PrivateRoutes';
 import Website from './Website3';
+import ForgotPassword from './components/ForgotPassword';
+import ResetPassword from './components/ResetPassword';
 
 
 const App = () => {
@@ -46,6 +48,8 @@ const App = () => {
         <Route path="/login" element={<Login handleLogin={handleLogin} />} />
         <Route path="/signup" element={<Signup handleLogin={handleLogin} />} />
         <Route path="/email/finder" element={<EmailFinder id={id} />} />
+        <Route path='/forgot-password' element={<ForgotPassword/>}/>
+        <Route path='/reset-password' element={<ResetPassword/>}/>
 
         {/* Protecting Admin Routes */}
         <Route path="/admin" element={

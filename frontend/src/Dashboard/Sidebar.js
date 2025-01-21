@@ -99,7 +99,7 @@ function ResponsiveDrawer() {
         </DrawerHeader>
         <Divider />
         <List>
-          <ListItem onClick={() => navigate("/admin")}>
+          {/* <ListItem onClick={() => navigate("/admin")}>
             <ListItemButton
               sx={{
                 minHeight: 48,
@@ -112,7 +112,7 @@ function ResponsiveDrawer() {
               </ListItemIcon>
               <ListItemText>Dashboard</ListItemText>
             </ListItemButton>
-          </ListItem>
+          </ListItem> */}
 
           <ListItem onClick={() => navigate("/admin-user-details")}>
             <ListItemButton

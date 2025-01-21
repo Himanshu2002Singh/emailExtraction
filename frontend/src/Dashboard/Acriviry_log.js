@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import jsPDF from 'jspdf';
+import 'jspdf-autotable';
 import './activity_log.css';
-import { Box, Modal, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Typography, useMediaQuery } from '@mui/material';
+import { Box, Modal, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Typography, Button, useMediaQuery } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
 import NavbarDashboard from './NavbarDashboard';
 import ResponsiveDrawer from './Sidebar';
@@ -18,7 +20,7 @@ const UserActivity = () => {
   useEffect(() => {
     const fetchUsers = async () => {
       try {
-        const response = await axios.get('https://webmailextract.com/api/users_activity2');
+        const response = await axios.get('http://localhost:5000/api/users_activity2');
         const filteredUsers = response.data.filter(user => user.role === 'user');
         setUsers(filteredUsers);
       } catch (error) {
@@ -31,7 +33,7 @@ const UserActivity = () => {
 
   const fetchActivityLogs = async (id) => {
     try {
-      const response = await axios.get(`https://webmailextract.com/api/activity_log/${id}`);
+      const response = await axios.get(`http://localhost:5000/api/activity_log/${id}`);
       setActivityLogs(response.data);
     } catch (error) {
       console.error('Error fetching activity logs:', error);
@@ -48,6 +50,22 @@ const UserActivity = () => {
     setOpenModal(false);
     setSelectedUser(null);
     setActivityLogs([]);
+  };
+
+  const downloadActivityLog = () => {
+    const doc = new jsPDF();
+    doc.text(`Activity Log for ${selectedUser?.fullName}`, 20, 20);
+    
+    const tableColumn = ['Details', 'Date'];
+    const tableRows = activityLogs.map(log => [log.activity, new Date(log.timestamp).toLocaleString()]);
+    
+    doc.autoTable({
+      head: [tableColumn],
+      body: tableRows,
+      startY: 30,
+    });
+
+    doc.save(`Activity_Log_${selectedUser?.fullName}.pdf`);
   };
 
   return (
@@ -89,7 +107,7 @@ const UserActivity = () => {
       >
         <Box sx={{ ...style, width: isMobile ? '90%' : '80%' }}>
           <Typography variant="h6" id="user-activity-title">Activity Log for {selectedUser?.fullName}</Typography>
-          <TableContainer component={Paper} sx={{ maxHeight: 400 }}>
+          <TableContainer component={Paper} sx={{ maxHeight: 400, mb: 2 }}>
             <Table stickyHeader>
               <TableHead>
                 <TableRow>
@@ -113,6 +131,7 @@ const UserActivity = () => {
               </TableBody>
             </Table>
           </TableContainer>
+          <Button variant="contained" color="primary" onClick={downloadActivityLog}>Download Activity Log</Button>
         </Box>
       </Modal>
     </div>

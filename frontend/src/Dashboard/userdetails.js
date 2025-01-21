@@ -13,7 +13,7 @@ const UserDetails = () => {
   useEffect(() => {
     const fetchUsers = async () => {
       try {
-        const response = await axios.get('https://webmailextract.com/users/details'); // Adjust the URL as needed
+        const response = await axios.get('http://localhost:5000/users/details'); // Adjust the URL as needed
         setUsers(response.data);
         setLoading(false);
       } catch (error) {

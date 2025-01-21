@@ -9,12 +9,12 @@ const Signup = ({ handleLogin }) => {
     fullName: '',
     email: '',
     password: '',
-    country: '',
-    state: '',
-    city: '',
-    whatsapp: '',
+    // country: '',
+    // state: '',
+    // city: '',
+    // whatsapp: '',
     phoneNumber: '',
-    companyName: '',
+    // companyName: '',
   });
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
@@ -31,11 +31,11 @@ const Signup = ({ handleLogin }) => {
     e.preventDefault();
 
     try {
-      const response = await axios.post('https://webmailextract.com/signup', formData);
+      const response = await axios.post('http://localhost:5000/signup', formData);
       localStorage.setItem('token', response.data.token);
       handleLogin(response.data.credits, response.data.id);
       setSuccess('Signup successful! Redirecting...');
-      navigate('/email/finder');
+      navigate('/login');
     } catch (error) {
       setError('Error signing up');
     }
@@ -82,7 +82,7 @@ const Signup = ({ handleLogin }) => {
             />
             <i className="fa fa-lock"></i>
           </div>
-          <div className="input-group2">
+          {/* <div className="input-group2">
             <input
               type="text"
               name="country"
@@ -124,7 +124,7 @@ const Signup = ({ handleLogin }) => {
               placeholder="WhatsApp"
             />
             <i className="fa fa-whatsapp"></i>
-          </div>
+          </div> */}
           <div className="input-group2">
             <input
               type="text"
@@ -136,7 +136,7 @@ const Signup = ({ handleLogin }) => {
             />
             <i className="fa fa-phone"></i>
           </div>
-          <div className="input-group2">
+          {/* <div className="input-group2">
             <input
               type="text"
               name="companyName"
@@ -145,7 +145,7 @@ const Signup = ({ handleLogin }) => {
               placeholder="Company Name (optional)"
             />
             <i className="fa fa-building"></i>
-          </div>
+          </div> */}
           <button type="submit" className="signup-button">Signup</button>
         </form>
         <div className="login-link">

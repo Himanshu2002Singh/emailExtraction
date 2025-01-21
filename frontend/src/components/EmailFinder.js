@@ -12,15 +12,16 @@ const EmailFinder = ({id}) => {
     const [extractPhone, setExtractPhone] = useState(true);
     const [extractSocialMedia, setExtractSocialMedia] = useState(true);
     const [extractCategory, setExtractCategory] = useState(true);
-    const [maxEmails, setMaxEmails] = useState(1);
+    const [maxEmails, setMaxEmails] = useState("1");
     const [file, setFile] = useState(null);
     const [userPackage, setUserPackage] = useState(null);
     const [credits, setCredits] = useState(0);
     const [premium, setPremium] = useState(false);
     const [creditExpired, setCreditExpired] = useState(false);
-    const [extractionResults, setExtractionResults] = useState([]); // State to hold extraction results
+    const [extractionResults, setExtractionResults] = useState([]); // Initialize as an array
     const [loading, setLoading] = useState(false);
-
+    
+    const [domainCount, setDomainCount] = useState(0);
 
     const handleDragOver = (e) => {
         e.preventDefault();
@@ -36,30 +37,44 @@ const EmailFinder = ({id}) => {
     };
 
 
-    const handleDownloadPDF = () => {
-        const doc = new jsPDF();
+    // const handleDownloadPDF = () => {
+    //     const doc = new jsPDF();
     
-        // Add heading
-        doc.text("Extracted Results", 20, 10);
+    //     // Add heading
+    //     doc.text("Extracted Results", 20, 10);
     
-        // Add table data to PDF
-        doc.autoTable({
-            head: [['Domain', 'Email', 'Phone Number', 'Social Media', 'Category']],
-            body: extractionResults.map(result => [
-                result.domain,
-                result.emails.length > 0 ? result.emails.join('\n') : 'N/A',
-                result.phones.length > 0
-                    ? result.phones.filter(phone => /^[0-9]{10,15}$/.test(phone)).join('\n')
-                    : 'N/A',
-                result.socialMedia.length > 0 ? result.socialMedia.join('\n') : 'N/A',
-                result.category || 'N/A'
-            ]),
-        });
+    //     // Add table data to PDF
+    //     doc.autoTable({
+    //         head: [['Domain', 'Email', 'Phone Number', 'Social Media', 'Category']],
+    //         body: extractionResults.map(result => [
+    //             result.domain,
+    //             result.emails.length > 0 ? result.emails.join('\n') : 'N/A',
+    //             result.phones.length > 0
+    //                 ? result.phones.filter(phone => /^[0-9]{10,15}$/.test(phone)).join('\n')
+    //                 : 'N/A',
+    //             result.socialMedia.length > 0 ? result.socialMedia.join('\n') : 'N/A',
+    //             result.category || 'N/A'
+    //         ]),
+    //     });
     
-        // Save the PDF
-        doc.save('extracted-results.pdf');
-    };
+    //     // Save the PDF
+    //     doc.save('extracted-results.pdf');
+    // };
+  
 
+
+    const handleInputChange = (e) => {
+        // Split input by new lines and filter out empty lines
+        const domains = e.target.value.split('\n').filter(Boolean);
+        
+        // Create a Set to get unique domains and limit to 100 entries
+        const uniqueDomains = Array.from(new Set(domains)).slice(0, 100);
+
+        // Update state: domainsEntered (input text) and domainCount (count of unique entries)
+        setDomainsEntered(uniqueDomains.join('\n'));
+        setDomainCount(uniqueDomains.length);
+       
+    };
 
   // Fetch user details
   useEffect(() => {
@@ -67,7 +82,7 @@ const EmailFinder = ({id}) => {
         const token = localStorage.getItem('token');
         if (token) {
             try {
-                const response = await axios.get(`https://webmailextract.com/api/user/details/${id}`);
+                const response = await axios.get(`http://localhost:5000/api/user/details/${id}`);
                 const { package: userPackage, credits, expirationDate, input_max: maxInput, premium_user: premium } = response.data;
 
                 setUserPackage(userPackage);
@@ -75,7 +90,7 @@ const EmailFinder = ({id}) => {
                 setPremium(premium);
 
                 const currentDate = new Date();
-                if (expirationDate && new Date(expirationDate) < currentDate) {
+                if (premium && expirationDate && new Date(expirationDate) < currentDate) {
                     setCreditExpired(true);
                 }
             } catch (error) {
@@ -87,19 +102,32 @@ const EmailFinder = ({id}) => {
 }, [id]);
 
 
+
 // CSV Download function
 const handleDownloadCSV = () => {
-    // Prepare the CSV content
+    // Prepare the CSV headers
     const headers = ['Domain', 'Email', 'Phone Number', 'Social Media', 'Category'];
-    const rows = extractionResults.map(result => [
-      result.domain,
-      result.emails.length > 0 ? result.emails.join('; ') : 'N/A',
-      result.phones.length > 0
-        ? result.phones.filter(phone => /^[0-9]{10,15}$/.test(phone)).join('; ')
-        : 'N/A',
-      result.socialMedia.length > 0 ? result.socialMedia.join('; ') : 'N/A',
-      result.category || 'N/A'
-    ]);
+    
+    // Prepare rows with emails based on maxEmails selection
+    const rows = extractionResults.map(result => {
+        // Check maxEmails to determine if we include a single or multiple emails
+        const emails = result.emails.length > 0
+            ? (maxEmails === "1" ? result.emails.slice(0, 1).join('; ') : result.emails.join('; '))
+            : 'N/A';
+        
+        // Filter and join phone numbers, format social media links
+        const phones = result.phones.length > 0
+            ? result.phones.filter(phone => /^[0-9]{10,15}$/.test(phone)).join('; ')
+            : 'N/A';
+
+        const socialMedia = result.socialMedia.length > 0
+            ? result.socialMedia.join('; ')
+            : 'N/A';
+
+        const category = result.category || 'N/A';
+
+        return [result.domain, emails, phones, socialMedia, category];
+    });
 
     // Combine headers and rows into CSV format
     let csvContent = headers.join(',') + '\n' + rows.map(row => row.join(',')).join('\n');
@@ -119,65 +147,85 @@ const handleDownloadCSV = () => {
 
     // Clean up the link after download
     document.body.removeChild(link);
-  };
+};
 
 
-// Perform extraction with API call
-const performExtraction = async () => {
+  const performExtraction = async () => {
     setLoading(true);
     const token = localStorage.getItem('token');
-    if (!token || creditExpired) {
+    if (!token) {
         alert("You need a valid token or credits expired.");
         setLoading(false);
         return;
     }
-    const domainList = domainsEntered.split('\n').slice(0, 100); // Using the string properly
 
-// Assuming the response structure has domains, emails, phones, and profiles
-try {
-    const response = await axios.post(`https://webmailextract.com/api/extract/${id}`, {
-        urls: domainList,
-        extractEmails: maxEmails,
-        extractProfiles: extractSocialMedia,
-        extractPhoneNumbers: extractPhone,
-        extractCategories: extractCategory,
-    }, {
-        headers: { Authorization: `Bearer ${token}` }
-    });
+    if (premium ==='yes' && creditExpired) {
+        alert("You need a valid credits expired.");
+        setLoading(false);
+        return;
+    }
 
-    // Prepare extraction results to store arrays of emails, phones, and social media profiles for each domain
-    const extractionResults = domainList.map((domain, index) => ({
-        domain,
-        emails: response.data.emails || [],       // Array of emails
-        phones: response.data.phones || [],       // Array of phone numbers
-        socialMedia: response.data.profiles || [], // Array of social media profiles
-        category: response.data.categories ? response.data.categories[index] || 'N/A' : 'N/A',
-    }));
+    const domainList = domainsEntered.split('\n').slice(0, 100);
 
-    // Set extraction results
-    setExtractionResults(extractionResults);
-    setCredits((prev) => prev - domainList.length);
+    try {
+        const response = await axios.post(`http://localhost:5000/api/extract/${id}`, {
+            urls: domainList,
+            extractEmails: maxEmails,
+            extractProfiles: extractSocialMedia,
+            extractPhoneNumbers: extractPhone,
+            extractCategories: extractCategory,
+        }, {
+            headers: { Authorization: `Bearer ${token}` }
+        });
 
-    // Log activity
-    await axios.post(`https://webmailextract.com/api/user/activity/${id}`, {
-        urls: domainList,
-        emailCount: response.data.emails?.length || 0,
-        phoneCount: response.data.phones?.length || 0,
-        profileCount: response.data.profiles?.length || 0,
-        categoryCount: response.data.categories?.length || 0,
-    }, {
-        headers: { Authorization: `Bearer ${token}` }
-    });
-} catch (error) {
-    console.error('Error extracting data:', error);
-    alert("Failed to extract data. Please try again.");
-} finally {
-    setLoading(false);
-}
+        // Convert response data to an array for easier mapping
+        const resultsArray = Object.entries(response.data).map(([domain, data]) => ({
+            domain,
+            emails: data.emails || [],
+            phones: data.phones || [],
+            socialMedia: data.profiles || [],
+            category: data.categories ? data.categories[0] || 'N/A' : 'N/A'
+        }));
 
+        // Sort emails by priority if emailPriorities array is defined
+        resultsArray.forEach(result => {
+            result.emails.sort((a, b) => {
+                const priorityA = emailPriorities.findIndex(priority => a.includes(priority));
+                const priorityB = emailPriorities.findIndex(priority => b.includes(priority));
+                if (priorityA !== -1 && priorityB !== -1) {
+                    return priorityA - priorityB;
+                } else if (priorityA !== -1) {
+                    return -1;
+                } else if (priorityB !== -1) {
+                    return 1;
+                } else {
+                    return 0;
+                }
+            });
+        });
 
+        setExtractionResults(resultsArray);
+        setCredits((prev) => prev - domainList.length);
 
+        // Log activity
+        await axios.post(`http://localhost:5000/api/user/activity/${id}`, {
+            urls: domainList,
+            emailCount: resultsArray.reduce((acc, data) => acc + (data.emails?.length || 0), 0),
+            phoneCount: resultsArray.reduce((acc, data) => acc + (data.phones?.length || 0), 0),
+            profileCount: resultsArray.reduce((acc, data) => acc + (data.socialMedia?.length || 0), 0),
+            categoryCount: resultsArray.reduce((acc, data) => acc + (data.category ? 1 : 0), 0),
+        }, {
+            headers: { Authorization: `Bearer ${token}` }
+        });
+
+    } catch (error) {
+        console.error('Error extracting data:', error);
+        alert("Failed to extract data. Please try again.");
+    } finally {
+        setLoading(false);
+    }
 };
+
 
     // Drag and drop functionality for email priority
     const [emailPriorities, setEmailPriorities] = useState([
@@ -233,20 +281,21 @@ try {
                                         </li>
                                     </ul>
                                     <div className={`react-tabs__tab-panel ${activeTab === 'textInput' ? 'react-tabs__tab-panel--selected' : ''}`} role="tabpanel">
-                                        <div className="form-group">
-                                            <label>Enter one domain/URL per line Below And Press Extract Email:</label>
-                                            <textarea
-                                                rows="4"
-                                                className="form-control"
-                                                onChange={(e) => setDomainsEntered(e.target.value)}
-                                            ></textarea>
-                                            <div className="d-flex justify-content-end">
-                                                <small className="text-secondary">
-                                                    {domainsEntered} / 100 Unique Websites entered
-                                                </small>
-                                            </div>
-                                        </div>
-                                    </div>
+            <div className="form-group">
+                <label>Enter one domain/URL per line Below And Press Extract Email:</label>
+                <textarea
+                    rows="4"
+                    className="form-control"
+                    value={domainsEntered}
+                    onChange={handleInputChange}
+                ></textarea>
+                <div className="d-flex justify-content-end">
+                    <small className="text-secondary">
+                        {domainCount} / 100 Unique Websites entered
+                    </small>
+                </div>
+            </div>
+        </div>
                                     <div className={`react-tabs__tab-panel ${activeTab === 'excelInput' ? 'react-tabs__tab-panel--selected' : ''}`} role="tabpanel">
                                         <div className="form-group">
                                             <label>Upload Excel file (.xlsx) or Drag and Drop:</label>
@@ -338,7 +387,7 @@ try {
 
                                     <hr />
 
-                                    <CreditsInfo credits={credits} used={0} remaining={credits} />
+                                    <CreditsInfo credits={credits} used={100-credits} remaining={credits} />
 
                                     <hr />
 
@@ -356,68 +405,65 @@ try {
                     </div>
                 </div>
             </div>
-
             <div className="container mt-5">
-        {extractionResults.length > 0 && (
-            <>
-              <button type="button" className="btn btn-success ml-2" onClick={handleDownloadCSV}>
-        Download CSV
-      </button>
-                <h2>Extracted Results</h2>
+    {extractionResults.length > 0 && (
+        <>
+            <button type="button" className="btn btn-success ml-2" onClick={handleDownloadCSV}>
+                Download CSV
+            </button>
+            <h2>Extracted Results</h2>
 
-                {/* Table is wrapped in table-responsive to make it responsive */}
-                <div className="table-responsive">
-                    <table className="table table-bordered">
-                        <thead>
-                            <tr>
-                                <th>Domain</th>
-                                <th>Email</th>
-                                <th>Phone Number</th>
-                                <th>Social Media</th>
-                                <th>Category</th>
+            {/* Responsive table */}
+            <div className="table-responsive">
+                <table className="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th>Domain</th>
+                            <th>Email</th>
+                            <th>Phone Number</th>
+                            <th>Social Media</th>
+                            <th>Category</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {extractionResults.map((result, index) => (
+                            <tr key={index}>
+                                <td>{result.domain}</td>
+                                <td>
+                                    {result.emails && result.emails.length > 0
+                                        ? (
+                                            maxEmails === "1" 
+                                            ? <div>{result.emails[0]}</div> // Show only the first email if maxEmails is set to "1"
+                                            : result.emails.map((email, idx) => <div key={idx}>{email}</div>) // Show all emails
+                                          )
+                                        : 'N/A'}
+                                </td>
+                                <td>
+                                    {result.phones && result.phones.length > 0
+                                        ? result.phones
+                                            .filter(phone => /^[0-9]{10}$/.test(phone)) // Validate phone format
+                                            .map((phone, idx) => <div key={idx}>{phone}</div>)
+                                        : 'N/A'}
+                                </td>
+                                <td>
+                                    {result.socialMedia && result.socialMedia.length > 0
+                                        ? result.socialMedia.map((profile, idx) => (
+                                            <div key={idx}>
+                                                <a href={profile} target="_blank" rel="noopener noreferrer">{profile}</a>
+                                            </div>
+                                          ))
+                                        : 'N/A'}
+                                </td>
+                                <td>{result.category ? result.category : 'N/A'}</td>
                             </tr>
-                        </thead>
-                        <tbody>
-                            {extractionResults.map((result, index) => (
-                                <tr key={index}>
-                                    <td>{result.domain}</td>
-                                    <td>
-                                        {result.emails.length > 0 
-                                            ? result.emails.map((email, idx) => <div key={idx}>{email}</div>)
-                                            : 'N/A'}
-                                    </td>
-                                    <td>
-                                        {result.phones.length > 0 
-                                            ? result.phones
-                                                .filter(phone => /^[0-9]{10,15}$/.test(phone))
-                                                .map((phone, idx) => <div key={idx}>{phone}</div>)
-                                            : 'N/A'}
-                                    </td>
-                                    <td>
-                                        {result.socialMedia.length > 0 
-                                            ? result.socialMedia.map((profile, idx) => (
-                                                <div key={idx}>
-                                                    <a href={profile} target="_blank" rel="noopener noreferrer">{profile}</a>
-                                                </div>
-                                            ))
-                                            : 'N/A'}
-                                    </td>
-                                    <td>{result.category || 'N/A'}</td>
-                                </tr>
-                            ))}
-                        </tbody>
-                    </table>
-                </div>
+                        ))}
+                    </tbody>
+                </table>
+            </div>
+        </>
+    )}
+</div>
 
-                {/* Button to download the table as PDF */}
-                {/* Button to download CSV */}
-      {/* <button type="button" className="btn btn-success ml-2" onClick={handleDownloadCSV}>
-        Download CSV
-      </button> */}
-            </>
-        )}
-    </div>
-  
 
 
             <Packages/>

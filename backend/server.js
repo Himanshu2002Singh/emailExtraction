@@ -3,11 +3,14 @@ const axios = require('axios');
 const cheerio = require('cheerio');
 const cors = require('cors');
 const fs = require('fs');
+const crypto = require('crypto');
 const mysql = require('mysql2');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
+const nodemailer = require('nodemailer'); // For sending emails
 const path = require('path');
 const multer = require('multer');
+
 const { parse } = require('json2csv');
 
 const app = express();
@@ -22,7 +25,7 @@ const db = mysql.createConnection({
   host: 'localhost',
   user: 'root',
   password: '',
-  database: 'myapp'
+  database:'myapp'
 });
 
 db.connect(err => {
@@ -39,6 +42,9 @@ const storage = multer.diskStorage({
     cb(null, Date.now() + path.extname(file.originalname));
   }
 });
+
+
+
 
 const upload = multer({ storage });
 
@@ -60,9 +66,14 @@ const authenticateToken = (req, res, next) => {
   });
 };
 
+
+function generateResetToken() {
+  return crypto.randomBytes(32).toString('hex');
+}
+
 // Route: User Signup
 app.post('/signup', async (req, res) => {
-  const { fullName, email, password, country, state, city, whatsapp, phoneNumber, companyName } = req.body;
+  const { fullName, email, password,  phoneNumber,  } = req.body;
 
   try {
     const hashedPassword = await bcrypt.hash(password, 10);
@@ -73,8 +84,8 @@ app.post('/signup', async (req, res) => {
     const package = 100;
 
     db.query(
-      'INSERT INTO users (fullName, email, password, country, state, city, whatsapp, phoneNumber, companyName, role, credits, premium_user, input_max,package) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,?)',
-      [fullName, email, hashedPassword, country, state, city, whatsapp, phoneNumber, companyName, defaultRole, credits, premiumUser, inputMax, package],
+      'INSERT INTO users (fullName, email, password, phoneNumber, role, credits, premium_user, input_max,package) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)',
+      [fullName, email, hashedPassword,phoneNumber, defaultRole, credits, premiumUser, inputMax, package],
       (err, result) => {
         if (err) {
           if (err.code === 'ER_DUP_ENTRY') {
@@ -83,9 +94,8 @@ app.post('/signup', async (req, res) => {
           return res.status(500).send({ message: 'Database error' });
         }
 
-        const userId = result.insertId; // Get the ID of the newly created user
+        const userId = result.id; // Get the ID of the newly created user
         const token = generateToken(userId); // Generate token using userId
-
         res.status(201).send({
           message: 'User registered successfully',
           token, 
@@ -143,6 +153,121 @@ app.post('/login', async (req, res) => {
     res.status(500).send({ message: 'An unexpected error occurred' });
   }  
 });
+
+// Configure nodemailer with SMTP settings
+const transporter = nodemailer.createTransport({
+  host: 'smtp.gmail.com',  // Replace with your SMTP host
+  port: 465, // Use 465 for SSL
+  secure: true, // Set to true if using port 465
+  auth: {
+    user: 'rajputhimanshusingh2002@gmail.com',  // Replace with your SMTP email
+    pass: 'bieggfhftoafuohk'  // Replace with your SMTP password
+  },
+  tls: {
+    rejectUnauthorized: false,
+  }
+});
+
+// Utility function to generate a secure reset token
+function generateResetToken() {
+  return crypto.randomBytes(32).toString('hex');
+}
+
+
+// Forgot Password Endpoint
+app.post('/forgot-password', (req, res) => {
+  const { email } = req.body;
+
+  if (!email) {
+    return res.status(400).send({ message: 'Email is required' });
+  }
+
+  // Check if the user exists
+  db.query('SELECT * FROM users WHERE email = ?', [email], (err, results) => {
+    if (err) {
+      console.error('Database error:', err);
+      return res.status(500).send({ message: 'Database error' });
+    }
+    if (results.length === 0) {
+      return res.status(404).send({ message: 'User not found' });
+    }
+
+    const resetToken = generateResetToken();
+    const resetTokenExpiry = new Date(Date.now() + 3600000); // 1-hour expiry
+
+    // Save reset token and expiry to the user record in the database
+    db.query(
+      'UPDATE users SET reset_token = ?, reset_token_expiry = ? WHERE email = ?',
+      [resetToken, resetTokenExpiry, email],
+      (err) => {
+        if (err) {
+          console.error('Database error:', err);
+          return res.status(500).send({ message: 'Database error' });
+        }
+
+        // Send the reset link via email
+        const resetLink = `http://localhost:3000/reset-password?token=${resetToken}`;
+        const mailOptions = {
+          from: 'rajputhimanshusingh2002@gmail.com', // Replace with your email
+          to: email,
+          subject: 'Password Reset Request',
+          text: `You requested a password reset. Click the link to reset your password: ${resetLink}`
+        };
+
+        transporter.sendMail(mailOptions, (error, info) => {
+          if (error) {
+            console.error('Email error:', error);
+            return res.status(500).send({ message: 'Failed to send email. Please try again later.' });
+          }
+          res.send({ message: 'Password reset link sent to your email' });
+        });
+      }
+    );
+  });
+});
+
+// Reset Password Endpoint
+app.post('/reset-password', async (req, res) => {
+  const { token, password } = req.body;
+
+  if (!token || !password) {
+    return res.status(400).send({ message: 'Token and password are required' });
+  }
+
+  // Find user by reset token
+  db.query(
+    'SELECT * FROM users WHERE reset_token = ? AND reset_token_expiry > NOW()',
+    [token],
+    async (err, results) => {
+      if (err) {
+        console.error('Database error:', err);
+        return res.status(500).send({ message: 'Database error' });
+      }
+      if (results.length === 0) {
+        return res.status(400).send({ message: 'Invalid or expired token' });
+      }
+
+      const user = results[0];
+
+      // Hash the new password
+      const hashedPassword = await bcrypt.hash(password, 10);
+
+      // Update password and clear reset token fields
+      db.query(
+        'UPDATE users SET password = ?, reset_token = NULL, reset_token_expiry = NULL WHERE id = ?',
+        [hashedPassword, user.id],
+        (err) => {
+          if (err) {
+            console.error('Database error:', err);
+            return res.status(500).send({ message: 'Database error' });
+          }
+          res.send({ message: 'Password has been reset successfully' });
+        }
+      );
+    }
+  );
+});
+
 
 // Route: Get User Details
 app.get('/users/details', (req, res) => {
@@ -302,47 +427,49 @@ app.post('/api/extract/:id', async (req, res) => {
   const { urls, extractEmails, extractProfiles, extractPhoneNumbers, extractCategories } = req.body;
 
   try {
-    const emailResults = [];
-    const profileResults = [];
-    const phoneResults = [];
-    const categoryResults = [];
+    const extractionResults = {}; // Store results by domain
 
     for (const url of urls) {
       const { data } = await axios.get(url);
       const $ = cheerio.load(data);
       const html = $.html();
 
+      const domain = new URL(url).hostname; // Extract domain from URL
+      extractionResults[domain] = extractionResults[domain] || { emails: [], profiles: [], phones: [], categories: [] };
+
       if (extractEmails) {
-        emailResults.push(...extractEmailsFromHtml(html));
+        extractionResults[domain].emails.push(...extractEmailsFromHtml(html));
       }
       if (extractProfiles) {
-        profileResults.push(...extractSocialProfilesFromHtml(html));
+        extractionResults[domain].profiles.push(...extractSocialProfilesFromHtml(html));
       }
       if (extractPhoneNumbers) {
-        phoneResults.push(...extractPhoneNumbersFromHtml(html));
+        extractionResults[domain].phones.push(...extractPhoneNumbersFromHtml(html));
       }
       if (extractCategories) {
-        categoryResults.push(...extractCategoriesFromHtml(html));
+        extractionResults[domain].categories.push(...extractCategoriesFromHtml(html));
       }
     }
 
     const userId = req.params.id;
 
     // Check user credits and package
-    db.query('SELECT credits, package, expirationDate FROM users WHERE id = ?', [userId], (err, results) => {
+    db.query('SELECT credits, package, expirationDate, premium_user FROM users WHERE id = ?', [userId], (err, results) => {
       if (err) {
         console.error('Error fetching user credits:', err);
         return res.status(500).json({ error: 'Failed to fetch user credits' });
       }
       
-      const { credits, package: userPackage, expirationDate } = results[0];
-      const totalCreditsRequired = urls.length; // Adjust as necessary based on actual credit usage logic
-      
+      const { credits, package: userPackage, expirationDate, premium_user } = results[0];
+      const totalCreditsRequired = urls.length;
+
       const currentDate = new Date();
       const isPackageExpired = expirationDate && new Date(expirationDate) < currentDate;
-      
-      if (userPackage <= 0 || isPackageExpired) {
-        return res.status(400).json({ error: 'Your package has expired or is invalid.' });
+
+      if (userPackage <= 0) {
+        if (premium_user === 'yes' && isPackageExpired) {
+          return res.status(400).json({ error: 'Your package has expired or is invalid.' });
+        }
       }
       if (credits < totalCreditsRequired) {
         return res.status(400).json({ error: 'Insufficient credits' });
@@ -362,12 +489,8 @@ app.post('/api/extract/:id', async (req, res) => {
           });
         });
 
-        res.json({
-          emails: emailResults,
-          profiles: profileResults,
-          phones: phoneResults,
-          categories: categoryResults
-        });
+        // Send domain-organized results
+        res.json(extractionResults);
       });
     });
   } catch (error) {

@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-import './Login.css'; // The updated CSS file with placeholder icons
+import './Login.css';
 import { useNavigate } from 'react-router-dom';
-import login1 from "../assets/img/login.avif"; // Assuming this is the image path
+import login1 from "../assets/img/login.avif";
 
 const Login = ({ handleLogin }) => {
   const [email, setEmail] = useState('');
@@ -14,7 +14,7 @@ const Login = ({ handleLogin }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post('https://webmailextract.com/login', { email, password });
+      const response = await axios.post('http://localhost:5000/login', { email, password });
 
       localStorage.setItem('token', response.data.token);
       localStorage.setItem('credits', response.data.credits);
@@ -23,9 +23,9 @@ const Login = ({ handleLogin }) => {
       handleLogin(response.data.credits, response.data.id);
 
       if (response.data.role === 'admin') {
-        navigate('/admin');
+        navigate('/admin-user-details');
       } else {
-        navigate('/');                                                
+        navigate('/');
       }
     } catch (error) {
       console.error('Login error', error);
@@ -37,32 +37,29 @@ const Login = ({ handleLogin }) => {
     <div className="login-container">
       <div className="login-box">
         <h2 className="login-title">WebMailExtractor</h2>
-        <p className="login-subtitle">Login to User /Admin Panel</p>
+        <p className="login-subtitle">Login to User</p>
         {error && <div className="error-message">{error}</div>}
         <form onSubmit={handleSubmit} className="login-inputs">
-          <div className="input-group">
-            <div className="input-wrapper">
-              <i className="fas fa-envelope input-icon"></i>
-              <input 
-                type="email" 
-                value={email} 
-                onChange={(e) => setEmail(e.target.value)} 
-                required 
-                placeholder="Email"
-              />
-            </div>
+       
+          <div className="input-group2">
+            <input
+              type="email" 
+              value={email} 
+              onChange={(e) => setEmail(e.target.value)} 
+              required 
+              placeholder="Email"
+            />
+            <i className="fa fa-envelope"></i>
           </div>
-          <div className="input-group">
-            <div className="input-wrapper">
-              <i className="fas fa-lock input-icon"></i>
-              <input 
-                type="password" 
-                value={password} 
-                onChange={(e) => setPassword(e.target.value)} 
-                required 
-                placeholder="Password"
-              />
-            </div>
+          <div className="input-group2">
+            <input
+              type="password" 
+              value={password} 
+              onChange={(e) => setPassword(e.target.value)} 
+              required 
+              placeholder="Password"
+            />
+            <i className="fa fa-lock"></i>
           </div>
           <div className="login-options">
             <div className="remember-me">
@@ -72,8 +69,11 @@ const Login = ({ handleLogin }) => {
           </div>
           <button type="submit" className="login-button">Login</button>
         </form>
+        <div className="forgot-password-link">
+          <p><a href="/forgot-password">Forgot Password?</a></p>
+        </div>
         <div className="signup-link">
-          <p>Don't have any account? <a href='/signup'>Signup</a></p>
+          <p>Don't have an account? <a href='/signup'>Signup</a></p>
         </div>
       </div>
     </div>

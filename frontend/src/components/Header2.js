@@ -62,7 +62,10 @@ const Header2 = ({ isLoggedIn, handleLogout, credits }) => {
           <div className={`collapse navbar-collapse ${isNavOpen ? 'show' : ''}`}  id="basic-navbar-nav">
             <div className="navbar-nav mr-auto">
               <Link className="nav-link" to="/">Home</Link>
-              <Link className="nav-link" to="/email/finder">Email Finder</Link>
+              
+              {isLoggedIn && (
+        <Link className="nav-link" to="/email/finder">Email Finder</Link>
+      )}
               <Link className="nav-link" to="/contact">Contact</Link>
             </div>
             <div className="ml-auto pb-4 pb-lg-0 mt-3 mt-lg-0">

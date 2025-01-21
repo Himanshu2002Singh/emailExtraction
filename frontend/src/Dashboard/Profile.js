@@ -54,7 +54,7 @@ const Profile = ({ id }) => {
     }
 
     try {
-      await axios.put(`https://webmailextract.com/users/${id}/profile`, formData, {
+      await axios.put(`http://localhost:5000/users/${id}/profile`, formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
         },
@@ -95,7 +95,7 @@ const Profile = ({ id }) => {
                 }}
               >
                 <Avatar
-                  src={`https://webmailextract.com/${profile.profilePhoto}`}
+                  src={`http://localhost:5000/${profile.profilePhoto}`}
                   alt="Profile"
                   sx={{ width: 100, height: 100, mb: 2 }}
                 />
