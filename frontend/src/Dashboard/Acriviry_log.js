@@ -20,7 +20,7 @@ const UserActivity = () => {
   useEffect(() => {
     const fetchUsers = async () => {
       try {
-        const response = await axios.get('http://localhost:5000/api/users_activity2');
+        const response = await axios.get('https://webmailextract.com/api/users_activity2');
         const filteredUsers = response.data.filter(user => user.role === 'user');
         setUsers(filteredUsers);
       } catch (error) {
@@ -33,7 +33,7 @@ const UserActivity = () => {
 
   const fetchActivityLogs = async (id) => {
     try {
-      const response = await axios.get(`http://localhost:5000/api/activity_log/${id}`);
+      const response = await axios.get(`https://webmailextract.com/api/activity_log/${id}`);
       setActivityLogs(response.data);
     } catch (error) {
       console.error('Error fetching activity logs:', error);

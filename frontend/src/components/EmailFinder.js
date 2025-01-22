@@ -82,7 +82,7 @@ const EmailFinder = ({id}) => {
         const token = localStorage.getItem('token');
         if (token) {
             try {
-                const response = await axios.get(`http://localhost:5000/api/user/details/${id}`);
+                const response = await axios.get(`https://webmailextract.com/api/user/details/${id}`);
                 const { package: userPackage, credits, expirationDate, input_max: maxInput, premium_user: premium } = response.data;
 
                 setUserPackage(userPackage);
@@ -168,7 +168,7 @@ const handleDownloadCSV = () => {
     const domainList = domainsEntered.split('\n').slice(0, 100);
 
     try {
-        const response = await axios.post(`http://localhost:5000/api/extract/${id}`, {
+        const response = await axios.post(`https://webmailextract.com/api/extract/${id}`, {
             urls: domainList,
             extractEmails: maxEmails,
             extractProfiles: extractSocialMedia,
@@ -208,7 +208,7 @@ const handleDownloadCSV = () => {
         setCredits((prev) => prev - domainList.length);
 
         // Log activity
-        await axios.post(`http://localhost:5000/api/user/activity/${id}`, {
+        await axios.post(`https://webmailextract.com/api/user/activity/${id}`, {
             urls: domainList,
             emailCount: resultsArray.reduce((acc, data) => acc + (data.emails?.length || 0), 0),
             phoneCount: resultsArray.reduce((acc, data) => acc + (data.phones?.length || 0), 0),

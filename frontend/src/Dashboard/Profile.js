@@ -23,7 +23,7 @@ const Profile = ({ id }) => {
 
     const fetchProfile = async () => {
       try {
-        const response = await axios.get(`http://localhost:5000/users-profile/${id}`);
+        const response = await axios.get(`https://webmailextract.com/users-profile/${id}`);
         setProfile(response.data);
         setEmail(response.data.email || '');
         setPhoneNumber(response.data.phoneNumber || '');
@@ -54,7 +54,7 @@ const Profile = ({ id }) => {
     }
 
     try {
-      await axios.put(`http://localhost:5000/users/${id}/profile`, formData, {
+      await axios.put(`https://webmailextract.com/users/${id}/profile`, formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
         },
@@ -95,7 +95,7 @@ const Profile = ({ id }) => {
                 }}
               >
                 <Avatar
-                  src={`http://localhost:5000/${profile.profilePhoto}`}
+                  src={`https://webmailextract.com/${profile.profilePhoto}`}
                   alt="Profile"
                   sx={{ width: 100, height: 100, mb: 2 }}
                 />

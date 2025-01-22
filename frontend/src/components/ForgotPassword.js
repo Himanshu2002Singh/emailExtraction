@@ -14,7 +14,7 @@ const ForgotPassword = () => {
     setError('');
 
     try {
-      const response = await axios.post('http://localhost:5000/forgot-password', { email });
+      const response = await axios.post('https://webmailextract.com/forgot-password', { email });
       setMessage(response.data.message);
     } catch (error) {
       setError(error.response?.data?.message || 'Error occurred');

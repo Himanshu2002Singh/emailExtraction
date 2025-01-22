@@ -206,7 +206,7 @@ app.post('/forgot-password', (req, res) => {
         }
 
         // Send the reset link via email
-        const resetLink = `http://localhost:3000/reset-password?token=${resetToken}`;
+        const resetLink = `https://webmailextract.com/reset-password?token=${resetToken}`;
         const mailOptions = {
           from: 'rajputhimanshusingh2002@gmail.com', // Replace with your email
           to: email,

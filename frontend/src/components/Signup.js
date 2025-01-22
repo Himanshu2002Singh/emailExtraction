@@ -31,7 +31,7 @@ const Signup = ({ handleLogin }) => {
     e.preventDefault();
 
     try {
-      const response = await axios.post('http://localhost:5000/signup', formData);
+      const response = await axios.post('https://webmailextract.com/signup', formData);
       localStorage.setItem('token', response.data.token);
       handleLogin(response.data.credits, response.data.id);
       setSuccess('Signup successful! Redirecting...');
