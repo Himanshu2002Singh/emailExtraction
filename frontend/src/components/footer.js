@@ -59,7 +59,7 @@ const Footer = () => {
           <div className="col-md-2"></div>
           <div className="col-md-8">
             <div className="footer-contact">
-              For any query WhatsApp/call at <a href="tel:+91-9777735384">+91-12345678</a>
+              For any query WhatsApp/call at <a href="tel:+91-9777735384">+1 (314) 791-8388</a>
             </div>
           </div>
           <div className="col-md-2"></div>
@@ -70,7 +70,7 @@ const Footer = () => {
           <div className="row">
             <div className="col-md-6">
               <div className="text">
-              Copyright ©️ 2024 Web Mail Extract. <a href="/"></a>. All Right Reserved
+              Copyright ©️ 2025 Web Mail Extract. <a href="/"></a>. All Right Reserved
               </div>
             </div>
           

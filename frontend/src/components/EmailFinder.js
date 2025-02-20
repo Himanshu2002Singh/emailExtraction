@@ -35,45 +35,29 @@ const EmailFinder = ({id}) => {
         e.preventDefault();
         setFile(e.dataTransfer.files[0]);
     };
-
-
-    // const handleDownloadPDF = () => {
-    //     const doc = new jsPDF();
-    
-    //     // Add heading
-    //     doc.text("Extracted Results", 20, 10);
-    
-    //     // Add table data to PDF
-    //     doc.autoTable({
-    //         head: [['Domain', 'Email', 'Phone Number', 'Social Media', 'Category']],
-    //         body: extractionResults.map(result => [
-    //             result.domain,
-    //             result.emails.length > 0 ? result.emails.join('\n') : 'N/A',
-    //             result.phones.length > 0
-    //                 ? result.phones.filter(phone => /^[0-9]{10,15}$/.test(phone)).join('\n')
-    //                 : 'N/A',
-    //             result.socialMedia.length > 0 ? result.socialMedia.join('\n') : 'N/A',
-    //             result.category || 'N/A'
-    //         ]),
-    //     });
-    
-    //     // Save the PDF
-    //     doc.save('extracted-results.pdf');
-    // };
   
-
 
     const handleInputChange = (e) => {
         // Split input by new lines and filter out empty lines
         const domains = e.target.value.split('\n').filter(Boolean);
-        
+    
+        // Process each domain to ensure it has a URL scheme
+        const processedDomains = domains.map(domain => {
+            // Check if the domain already starts with http:// or https://
+            if (!/^https?:\/\//i.test(domain)) {
+                // If not, prepend https://
+                return `https://${domain}`;
+            }
+            // If it already has a scheme, return it as is
+            return domain;
+        });
+    
         // Create a Set to get unique domains and limit to 100 entries
-        const uniqueDomains = Array.from(new Set(domains)).slice(0, 100);
-
+        const uniqueDomains = Array.from(new Set(processedDomains)).slice(0, 100);
+    
         // Update state: domainsEntered (input text) and domainCount (count of unique entries)
         setDomainsEntered(uniqueDomains.join('\n'));
         setDomainCount(uniqueDomains.length);
-       
     };
 
   // Fetch user details
