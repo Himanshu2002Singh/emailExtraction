@@ -36,17 +36,19 @@ const EmailFinder = ({id}) => {
         setFile(e.dataTransfer.files[0]);
     };
   
-
     const handleInputChange = (e) => {
         // Split input by new lines and filter out empty lines
         const domains = e.target.value.split('\n').filter(Boolean);
     
         // Process each domain to ensure it has a URL scheme
         const processedDomains = domains.map(domain => {
+            // Remove any existing http:// or https:// for display purposes
+            const displayDomain = domain.replace(/^https?:\/\//i, '');
+            
             // Check if the domain already starts with http:// or https://
             if (!/^https?:\/\//i.test(domain)) {
-                // If not, prepend https://
-                return `https://${domain}`;
+                // If not, prepend https:// for saving
+                return `https://${displayDomain}`;
             }
             // If it already has a scheme, return it as is
             return domain;
@@ -56,7 +58,7 @@ const EmailFinder = ({id}) => {
         const uniqueDomains = Array.from(new Set(processedDomains)).slice(0, 100);
     
         // Update state: domainsEntered (input text) and domainCount (count of unique entries)
-        setDomainsEntered(uniqueDomains.join('\n'));
+        setDomainsEntered(domains.join('\n')); // Display without https://
         setDomainCount(uniqueDomains.length);
     };
 

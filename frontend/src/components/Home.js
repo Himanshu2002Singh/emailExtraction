@@ -17,8 +17,9 @@ function Home() {
         <div className="content">
           <h1>Grow Your Business</h1>
           <p>
-            WEBMAILEXTRACTOR has many useful online tools that help digital marketers to get more leads and grow businesses.
-            Over 25,000+ companies, both big and small, are growing their business with SoftTechLab.
+          WebMailExtract offers a suite of powerful online tools designed to help digital marketers generate more 
+          leads and expand their businesses. Trusted by over 1000+ companies worldwide, from startups to 
+          enterprises, Web Mail Extract empowers growth and success.
           </p>
           <div className="buttons">
             <a href='/login'>
