@@ -37,28 +37,19 @@ const EmailFinder = ({id}) => {
     };
   
     const handleInputChange = (e) => {
-        // Split input by new lines and filter out empty lines
         const domains = e.target.value.split('\n').filter(Boolean);
-    
-        // Process each domain to ensure it has a URL scheme
+        
+        // Ensure all domains are prefixed with https://
         const processedDomains = domains.map(domain => {
-            // Remove any existing http:// or https:// for display purposes
-            const displayDomain = domain.replace(/^https?:\/\//i, '');
-            
-            // Check if the domain already starts with http:// or https://
-            if (!/^https?:\/\//i.test(domain)) {
-                // If not, prepend https:// for saving
-                return `https://${displayDomain}`;
-            }
-            // If it already has a scheme, return it as is
-            return domain;
+            const cleanDomain = domain.trim().replace(/^https?:\/\//i, '');
+            return `https://${cleanDomain}`;
         });
     
-        // Create a Set to get unique domains and limit to 100 entries
+        // Get unique domains and limit to 100
         const uniqueDomains = Array.from(new Set(processedDomains)).slice(0, 100);
     
-        // Update state: domainsEntered (input text) and domainCount (count of unique entries)
-        setDomainsEntered(domains.join('\n')); // Display without https://
+        // Update state: Show input as entered (without https://), but ensure extraction includes it
+        setDomainsEntered(domains.join('\n')); // Display input as entered (without https://)
         setDomainCount(uniqueDomains.length);
     };
 
@@ -151,7 +142,14 @@ const handleDownloadCSV = () => {
         return;
     }
 
-    const domainList = domainsEntered.split('\n').slice(0, 100);
+    const domainList = domainsEntered
+    .split('\n')
+    .filter(Boolean)
+    .map(domain => {
+        const cleanDomain = domain.trim().replace(/^https?:\/\//i, '');
+        return `https://${cleanDomain}`;
+    })
+    .slice(0, 100);
 
     try {
         const response = await axios.post(`https://webmailextract.com/api/extract/${id}`, {
