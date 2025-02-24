@@ -182,12 +182,12 @@ app.post('/forgot-password', (req, res) => {
     return res.status(400).send({ message: 'Email is required' });
   }
 
-  // Check if the user exists
-  db.query('SELECT * FROM users WHERE email = ?', [email], (err, results) => {
+  db.query('SELECT * FROM users WHERE email = ?', [email], async (err, results) => {
     if (err) {
-      console.error('Database error:', err);
+      console.error('Database error:', err);  // <-- Yeh error backend terminal me dekho
       return res.status(500).send({ message: 'Database error' });
     }
+    
     if (results.length === 0) {
       return res.status(404).send({ message: 'User not found' });
     }
@@ -195,29 +195,27 @@ app.post('/forgot-password', (req, res) => {
     const resetToken = generateResetToken();
     const resetTokenExpiry = new Date(Date.now() + 3600000); // 1-hour expiry
 
-    // Save reset token and expiry to the user record in the database
     db.query(
       'UPDATE users SET reset_token = ?, reset_token_expiry = ? WHERE email = ?',
       [resetToken, resetTokenExpiry, email],
       (err) => {
         if (err) {
-          console.error('Database error:', err);
-          return res.status(500).send({ message: 'Database error' });
+          console.error('Database update error:', err);  // <-- Yeh error backend terminal me dekho
+          return res.status(500).send({ message: 'Database error while saving token' });
         }
 
-        // Send the reset link via email
         const resetLink = `https://webmailextract.com/reset-password?token=${resetToken}`;
         const mailOptions = {
-          from: 'rajputhimanshusingh2002@gmail.com', // Replace with your email
+          from: 'rajputhimanshusingh2002@gmail.com',
           to: email,
           subject: 'Password Reset Request',
-          text: `You requested a password reset. Click the link to reset your password: ${resetLink}`
+          text: `Click to reset your password: ${resetLink}`
         };
 
         transporter.sendMail(mailOptions, (error, info) => {
           if (error) {
-            console.error('Email error:', error);
-            return res.status(500).send({ message: 'Failed to send email. Please try again later.' });
+            console.error('Email error:', error);  // <-- Yeh error backend terminal me dekho
+            return res.status(500).send({ message: 'Failed to send email' });
           }
           res.send({ message: 'Password reset link sent to your email' });
         });
@@ -225,6 +223,7 @@ app.post('/forgot-password', (req, res) => {
     );
   });
 });
+
 
 // Reset Password Endpoint
 app.post('/reset-password', async (req, res) => {
@@ -313,15 +312,15 @@ app.get('/users-credit', (req, res) => {
 // Route: Update User Credit or Expiration Date
 app.put('/user-credit/:id', (req, res) => {
   const { id } = req.params;
-  const { input_max, expirationDate } = req.body;
+  const { credits, expirationDate } = req.body;
 
   try {
     const updateFields = [];
     const queryParams = [];
 
-    if (input_max !== undefined) {
-      updateFields.push('input_max = ?');
-      queryParams.push(input_max);
+    if (credits !== undefined) {
+      updateFields.push('credits = ?');
+      queryParams.push(credits);
     }
 
     if (expirationDate !== undefined) {

@@ -371,7 +371,7 @@ const handleDownloadCSV = () => {
 
                                     <hr />
 
-                                    <CreditsInfo credits={credits} used={100-credits} remaining={credits} />
+                                    <CreditsInfo credits={credits}  />
 
                                     <hr />
 

@@ -97,13 +97,13 @@ const UpdateCredit = () => {
                         type="number"
                         step="0.01"
                         min="0"
-                        value={user.input_max || ''}
-                        onChange={(e) => handleInputChange(user.id, 'input_max', e.target.value)}
+                        value={user.credits || ''}
+                        onChange={(e) => handleInputChange(user.id, 'credits', e.target.value)}
                       />
                     </td>
                    
                     <td>
-                      <button onClick={() => handleUpdate(user.id, 'input_max', user.input_max)}>Update Input</button>
+                      <button onClick={() => handleUpdate(user.id, 'credits', user.credits)}>Update Input</button>
                     </td>
                     <td>
                       <button onClick={() => handleUpdate(user.id, 'expirationDate', user.expirationDate)}>Update Expiration Date</button>
